@@ -51,6 +51,7 @@ git clone https://github.com/raheeldevninja/habit_tap.git
 cd habit_tap
 flutter pub get
 flutter run
+```
 
 🤝 Contributing
 
