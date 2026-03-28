@@ -1,0 +1,139 @@
+{
+  "appTitle": "DailyHabits",
+  "home": "Home",
+  "todayHabits": "Today's Habits",
+  "completed": "COMPLETED",
+  "left": "left",
+  "dailyProgress": "Daily Progress",
+  "completedCount": "{completed} / {total} completed",
+  "@completedCount": {
+    "placeholders": {
+      "completed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "keepItUp": "Keep it up!",
+  "almostThere": "Almost there! Keep it up.",
+  "greatJob": "Great job! You've completed all your habits for today.",
+  "addHabit": "Add Habit",
+  "editHabit": "Edit Habit",
+  "habitName": "HABIT NAME",
+  "habitNameHint": "e.g., Drink Water",
+  "selectIcon": "SELECT ICON",
+  "reminder": "Reminder",
+  "notificationTime": "Notification Time",
+  "createHabit": "Create Habit",
+  "saveChanges": "Save Changes",
+  "delete": "Delete",
+  "deleteHabit": "Delete Habit?",
+  "deleteHabitConfirm": "Are you sure you want to delete this habit? This action cannot be undone.",
+  "cancel": "Cancel",
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "darkMode": "Dark Mode",
+  "notifications": "Notifications",
+  "language": "Language",
+  "dataManagement": "Data Management",
+  "exportData": "Export Data",
+  "importData": "Import Data",
+  "deleteAllData": "Delete All Data",
+  "deleteAllDataConfirm": "Are you sure you want to delete all your data? This includes all habits and their history.",
+  "deleteAll": "Delete All",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "statistics": "Statistics",
+  "weeklyCompletion": "Weekly Completion",
+  "monthlyConsistency": "Monthly Consistency",
+  "currentStreak": "CURRENT STREAK",
+  "bestStreak": "BEST STREAK",
+  "totalHabits": "TOTAL HABITS",
+  "days": "Days",
+  "habits": "Habits",
+  "noHistoryYet": "No history yet",
+  "history": "History",
+  "habitHistory": "{name} History",
+  "@habitHistory": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "habitDetails": "Habit Details",
+  "addHabitsToStart": "Add some habits to get started!",
+  "startDayHabit": "Start your day by completing a habit!",
+  "goodStart": "Good start! Keep going.",
+  "almostThere": "Almost there! Keep it up.",
+  "amazingJob": "Amazing job! You've completed everything for today.",
+  "edit": "Edit",
+  "general": "General",
+  "noStreakYet": "No streak yet",
+  "newRecord": "New Record!",
+  "ofBest": "{percentage}% of best",
+  "@ofBest": {
+    "placeholders": {
+      "percentage": { "type": "String" }
+    }
+  },
+  "startYourJourney": "Start your journey",
+  "allTimeRecord": "All-time record",
+  "weeklyProgress": "Weekly Progress",
+  "daysCompletedThisWeek": "{count}/{total} days completed this week",
+  "@daysCompletedThisWeek": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "monthlyProgress": "Monthly Progress",
+  "schedule": "Schedule",
+  "everyDay": "Every day",
+  "reminderDisabled": "Reminder disabled",
+  "recentHistory": "Recent History",
+  "seeAll": "See all",
+  "mon": "Mon",
+  "tue": "Tue",
+  "wed": "Wed",
+  "thu": "Thu",
+  "fri": "Fri",
+  "sat": "Sat",
+  "sun": "Sun",
+  "pleaseEnterHabitName": "Please enter a habit name",
+  "allDataDeleted": "All data deleted",
+  "leftCount": "{count} left",
+  "@leftCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "exportFailed": "Export failed: {error}",
+  "@exportFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dataImported": "Data imported successfully",
+  "importFailed": "Import failed: {error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "couldNotLaunch": "Could not launch {url}",
+  "@couldNotLaunch": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "vsLastWeek": "Vs last week ({percentage}%)",
+  "@vsLastWeek": {
+    "placeholders": {
+      "percentage": { "type": "int" }
+    }
+  },
+  "less": "LESS",
+  "more": "MORE",
+  "searchIcons": "Search icons...",
+  "noIconsFound": "No icons found matching your search",
+  "allIcons": "All Icons",
+  "version": "Version",
+  "aboutApp": "About App"
+}

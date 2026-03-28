@@ -1,0 +1,133 @@
+{
+  "appTitle": "DailyHabits",
+  "home": "Accueil",
+  "todayHabits": "Habitudes d'Aujourd'hui",
+  "completed": "TERMINÉ",
+  "left": "restantes",
+  "dailyProgress": "Progrès Quotidien",
+  "completedCount": "{completed} / {total} terminés",
+  "@completedCount": {
+    "placeholders": {
+      "completed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "keepItUp": "Continuez comme ça !",
+  "almostThere": "Presque là ! Continuez comme ça.",
+  "greatJob": "Bon travail ! Vous avez terminé toutes vos habitudes pour aujourd'hui.",
+  "addHabit": "Ajouter une Habitude",
+  "editHabit": "Modifier l'Habitude",
+  "habitName": "NOM DE L'HABITUDE",
+  "habitNameHint": "ex: Boire de l'eau",
+  "selectIcon": "SÉLECTIONNER L'ICÔNE",
+  "reminder": "Rappel",
+  "notificationTime": "Heure de Notification",
+  "createHabit": "Créer l'Habitude",
+  "saveChanges": "Enregistrer les Modifications",
+  "delete": "Supprimer",
+  "deleteHabit": "Supprimer l'Habitude ?",
+  "deleteHabitConfirm": "Êtes-vous sûr de vouloir supprimer cette habitude ? Cette action est irréversible.",
+  "cancel": "Annuler",
+  "settings": "Paramètres",
+  "appearance": "Apparence",
+  "darkMode": "Mode Sombre",
+  "notifications": "Notifications",
+  "language": "Langue",
+  "dataManagement": "Gestion des Données",
+  "exportData": "Exporter les Données",
+  "importData": "Importer les Données",
+  "deleteAllData": "Supprimer Toutes les Données",
+  "deleteAllDataConfirm": "Êtes-vous sûr de vouloir supprimer toutes vos données ? Cela inclut toutes les habitudes et leur historique.",
+  "deleteAll": "Tout supprimer",
+  "privacyPolicy": "Politique de Confidentialité",
+  "termsOfService": "Conditions d'Utilisation",
+  "statistics": "Statistiques",
+  "weeklyCompletion": "Complétion Hebdomadaire",
+  "monthlyConsistency": "Consistance Mensuelle",
+  "currentStreak": "SÉRIE ACTUELLE",
+  "bestStreak": "MEILLEURE SÉRIE",
+  "totalHabits": "TOTAL DES HABITUDES",
+  "days": "Jours",
+  "habits": "Habitudes",
+  "noHistoryYet": "Pas encore d'historique",
+  "history": "Historique",
+  "habitHistory": "Historique de {name}",
+  "@habitHistory": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "habitDetails": "Détails de l'Habitude",
+  "addHabitsToStart": "Ajoutez des habitudes pour commencer !",
+  "startDayHabit": "Commencez votre journée en complétant une habitude !",
+  "goodStart": "Bon début ! Continuez.",
+  "almostThere": "Presque là ! Continuez comme ça.",
+  "amazingJob": "Excellent travail ! Vous avez tout terminé pour aujourd'hui.",
+  "edit": "Modifier",
+  "general": "Général",
+  "noStreakYet": "Pas encore de série",
+  "newRecord": "Nouveau Record !",
+  "ofBest": "{percentage}% de la meilleure",
+  "@ofBest": {
+    "placeholders": {
+      "percentage": { "type": "String" }
+    }
+  },
+  "startYourJourney": "Commencez votre voyage",
+  "allTimeRecord": "Record historique",
+  "weeklyProgress": "Complétion Hebdomadaire",
+  "daysCompletedThisWeek": "{count}/{total} jours terminés cette semaine",
+  "monthlyProgress": "Progrès Mensuel",
+  "schedule": "Planning",
+  "everyDay": "Chaque jour",
+  "reminderDisabled": "Rappel désactivé",
+  "recentHistory": "Historique Récent",
+  "seeAll": "Voir tout",
+  "mon": "Lun",
+  "tue": "Mar",
+  "wed": "Mer",
+  "thu": "Jeu",
+  "fri": "Ven",
+  "sat": "Sam",
+  "sun": "Dim",
+  "pleaseEnterHabitName": "Veuillez entrer un nom d'habitude",
+  "allDataDeleted": "Toutes les données ont été supprimées",
+  "leftCount": "{count} restants",
+  "@leftCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "exportFailed": "Échec de l'exportation : {error}",
+  "@exportFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dataImported": "Données importées avec succès",
+  "importFailed": "Échec de l'importation : {error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "couldNotLaunch": "Impossible d'ouvrir {url}",
+  "@couldNotLaunch": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "vsLastWeek": "Par rapport à la semaine dernière ({percentage}%)",
+  "@vsLastWeek": {
+    "placeholders": {
+      "percentage": { "type": "int" }
+    }
+  },
+  "less": "MOINS",
+  "more": "PLUS",
+  "searchIcons": "Rechercher des icônes...",
+  "noIconsFound": "Aucune icône trouvée",
+  "allIcons": "Toutes les icônes",
+  "version": "Version",
+  "aboutApp": "À Propos de l'App"
+}

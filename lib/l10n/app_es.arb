@@ -1,0 +1,133 @@
+{
+  "appTitle": "DailyHabits",
+  "home": "Inicio",
+  "todayHabits": "Hábitos de Hoy",
+  "completed": "COMPLETADO",
+  "left": "restantes",
+  "dailyProgress": "Progreso Diario",
+  "completedCount": "{completed} / {total} completados",
+  "@completedCount": {
+    "placeholders": {
+      "completed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "keepItUp": "¡Sigue así!",
+  "almostThere": "¡Casi llegas! Sigue así.",
+  "greatJob": "¡Buen trabajo! Has completado todos tus hábitos por hoy.",
+  "addHabit": "Añadir Hábito",
+  "editHabit": "Editar Hábito",
+  "habitName": "NOMBRE DEL HÁBITO",
+  "habitNameHint": "p. ej., Beber Agua",
+  "selectIcon": "SELECCIONAR ICONO",
+  "reminder": "Recordatorio",
+  "notificationTime": "Hora de Notificación",
+  "createHabit": "Crear Hábito",
+  "saveChanges": "Guardar Cambios",
+  "delete": "Eliminar",
+  "deleteHabit": "¿Eliminar Hábito?",
+  "deleteHabitConfirm": "¿Estás seguro de que quieres eliminar este hábito? Esta acción no se puede deshacer.",
+  "cancel": "Cancelar",
+  "settings": "Ajustes",
+  "appearance": "Apariencia",
+  "darkMode": "Modo Oscuro",
+  "notifications": "Notificaciones",
+  "language": "Idioma",
+  "dataManagement": "Gestión de Datos",
+  "exportData": "Exportar Datos",
+  "importData": "Importar Datos",
+  "deleteAllData": "Eliminar Todos los Datos",
+  "deleteAllDataConfirm": "¿Estás seguro de que quieres eliminar todos tus datos? Esto incluye todos los hábitos y su historial.",
+  "deleteAll": "Eliminar todo",
+  "privacyPolicy": "Política de Privacidad",
+  "termsOfService": "Términos de Servicio",
+  "statistics": "Estadísticas",
+  "weeklyCompletion": "Cumplimiento Semanal",
+  "monthlyConsistency": "Consistencia Mensual",
+  "currentStreak": "RACHA ACTUAL",
+  "bestStreak": "MEJOR RACHA",
+  "totalHabits": "TOTAL DE HÁBITOS",
+  "days": "Días",
+  "habits": "Hábitos",
+  "noHistoryYet": "Aún no hay historial",
+  "history": "Historial",
+  "habitHistory": "Historial de {name}",
+  "@habitHistory": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "habitDetails": "Detalles del Hábito",
+  "addHabitsToStart": "¡Añade algunos hábitos para empezar!",
+  "startDayHabit": "¡Empieza el día completando un hábito!",
+  "goodStart": "¡Buen comienzo! Sigue así.",
+  "almostThere": "¡Ya casi estás! No te rindas.",
+  "amazingJob": "¡Increíble trabajo! Has completado todo por hoy.",
+  "edit": "Editar",
+  "general": "General",
+  "noStreakYet": "Aún no hay rachas",
+  "newRecord": "¡Nuevo Récord!",
+  "ofBest": "{percentage}% de lo mejor",
+  "@ofBest": {
+    "placeholders": {
+      "percentage": { "type": "String" }
+    }
+  },
+  "startYourJourney": "Comienza tu viaje",
+  "allTimeRecord": "Récord histórico",
+  "weeklyProgress": "Cumplimiento Semanal",
+  "daysCompletedThisWeek": "{count}/{total} días completados esta semana",
+  "monthlyProgress": "Progreso Mensual",
+  "schedule": "Horario",
+  "everyDay": "Cada día",
+  "reminderDisabled": "Recordatorio desactivado",
+  "recentHistory": "Historial Reciente",
+  "seeAll": "Ver todo",
+  "mon": "Lun",
+  "tue": "Mar",
+  "wed": "Mié",
+  "thu": "Jue",
+  "fri": "Vie",
+  "sat": "Sáb",
+  "sun": "Dom",
+  "pleaseEnterHabitName": "Por favor, introduce un nombre para el hábito",
+  "allDataDeleted": "Todos los datos eliminados",
+  "leftCount": "{count} restantes",
+  "@leftCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "exportFailed": "Error al exportar: {error}",
+  "@exportFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "dataImported": "Datos importados con éxito",
+  "importFailed": "Error al importar: {error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "couldNotLaunch": "No se pudo abrir {url}",
+  "@couldNotLaunch": {
+    "placeholders": {
+      "url": { "type": "String" }
+    }
+  },
+  "vsLastWeek": "Vs semana pasada ({percentage}%)",
+  "@vsLastWeek": {
+    "placeholders": {
+      "percentage": { "type": "int" }
+    }
+  },
+  "less": "MENOS",
+  "more": "MÁS",
+  "searchIcons": "Buscar iconos...",
+  "noIconsFound": "No se encontraron iconos",
+  "allIcons": "Todos los iconos",
+  "version": "Versión",
+  "aboutApp": "Acerca de la Aplicación"
+}
