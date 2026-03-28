@@ -44,10 +44,11 @@ HabitTap helps users build and maintain daily habits with a simple and distracti
 - Hive (Local Database)  
 - Material 3 UI  
 
-📦 Installation
+## 📦 Installation
 
-git clone https://github.com/raheeldevninja/habit_tap
-cd habittap
+```bash
+git clone https://github.com/raheeldevninja/habit_tap.git
+cd habit_tap
 flutter pub get
 flutter run
 
