@@ -16,26 +16,33 @@ HabitTap helps users build and maintain daily habits with a simple and distracti
   <img src="assets/screenshots/delete_all_data.jpeg" width="250"/>
 </p>
 
-✨ Features
-✅ Create, update, and delete habits (Full CRUD)
-🔁 Daily habit tracking with completion toggle
+## ✨ Features
 
-📊 Visual progress tracking:
-Weekly & monthly heatmaps
-Current streak & best streak
-📈 Global statistics dashboard
-⚙️ Settings:
-Multi-language support
-Notification toggle
-JSON backup (import/export)
-Full data reset
-🔒 100% offline (no backend, no authentication)
+- ✅ Create, update, and delete habits (Full CRUD)
+- 🔁 Daily habit tracking with completion toggle  
 
-🛠 Tech Stack
-Flutter (Dart)
-Riverpod (State Management)
-Hive (Local Database)
-Material 3 UI
+### 📊 Visual Progress Tracking
+- Weekly & monthly heatmaps  
+- Current streak & best streak  
+
+- 📈 Global statistics dashboard  
+
+### ⚙️ Settings
+- Multi-language support  
+- Notification toggle  
+- JSON backup (import/export)  
+- Full data reset  
+
+- 🔒 100% offline (no backend, no authentication)
+
+---
+
+## 🛠 Tech Stack
+
+- Flutter (Dart)  
+- Riverpod (State Management)  
+- Hive (Local Database)  
+- Material 3 UI  
 
 📦 Installation
 
