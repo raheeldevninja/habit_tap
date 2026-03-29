@@ -1,5 +1,11 @@
 # habit_tracker_app
 
+![Flutter](https://img.shields.io/badge/Flutter-02569B?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?logo=dart&logoColor=white)
+![Riverpod](https://img.shields.io/badge/State%20Management-Riverpod-blue)
+![Hive](https://img.shields.io/badge/Database-Hive-yellow)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)
+
 📱 HabitTap – Habit Tracker App
 
 A clean, minimal, and offline-first habit tracking app built with Flutter.
