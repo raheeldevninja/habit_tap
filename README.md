@@ -12,6 +12,13 @@ A clean, minimal, and offline-first habit tracking app built with Flutter.
 
 HabitTap helps users build and maintain daily habits with a simple and distraction-free experience — no login, no backend, no data collection.
 
+## 🎬 Demo
+
+<p align="center">
+  <img src="assets/habit_tap.gif" width="300" />
+</p>
+
+
 <p align="center">
   <img src="assets/screenshots/habits_main_page.jpeg" width="250"/>
   <img src="assets/screenshots/habit_details_1.jpeg" width="250"/>
