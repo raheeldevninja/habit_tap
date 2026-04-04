@@ -190,7 +190,6 @@ class HabitListNotifier extends AsyncNotifier<List<Habit>> {
   }
 }
 
-final habitListProvider =
-    AsyncNotifierProvider<HabitListNotifier, List<Habit>>(
+final habitListProvider = AsyncNotifierProvider<HabitListNotifier, List<Habit>>(
   () => HabitListNotifier(),
 );

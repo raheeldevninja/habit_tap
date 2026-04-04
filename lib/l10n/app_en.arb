@@ -135,5 +135,6 @@
   "noIconsFound": "No icons found matching your search",
   "allIcons": "All Icons",
   "version": "Version",
-  "aboutApp": "About App"
+  "aboutApp": "About App",
+  "youCannotCompleteFutureDates": "You cannot complete future dates"
 }

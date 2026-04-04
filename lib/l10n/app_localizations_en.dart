@@ -296,4 +296,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutApp => 'About App';
+
+  @override
+  String get youCannotCompleteFutureDates => 'You cannot complete future dates';
 }

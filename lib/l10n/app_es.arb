@@ -129,5 +129,6 @@
   "noIconsFound": "No se encontraron iconos",
   "allIcons": "Todos los iconos",
   "version": "Versión",
-  "aboutApp": "Acerca de la Aplicación"
+  "aboutApp": "Acerca de la Aplicación",
+  "youCannotCompleteFutureDates": "No puedes completar fechas futuras"
 }

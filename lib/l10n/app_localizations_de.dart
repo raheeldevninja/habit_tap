@@ -298,4 +298,8 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aboutApp => 'Über die App';
+
+  @override
+  String get youCannotCompleteFutureDates =>
+      'Du kannst keine zukünftigen Daten abschließen';
 }

@@ -72,8 +72,9 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                           "${activeHabitsForDay.length} ${context.l10n.left}",
                         ),
                         const SizedBox(height: 12),
-                        ...activeHabitsForDay
-                            .map((h) => _buildHabitCard(h, false)),
+                        ...activeHabitsForDay.map(
+                          (h) => _buildHabitCard(h, false),
+                        ),
                         const SizedBox(height: 24),
                       ],
                       if (completedHabitsForDay.isNotEmpty) ...[
@@ -90,10 +91,10 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                         ...[
                           SizedBox(height: 10), // Add this temporary dummy
                           ...completedHabitsForDay.map(
-                                (h) => _buildHabitCard(h, true, key: ValueKey(h.id)),
+                            (h) =>
+                                _buildHabitCard(h, true, key: ValueKey(h.id)),
                           ),
                         ],
-
                       ],
                       const SizedBox(height: 80), // Padding for FAB
                     ],
@@ -342,6 +343,9 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
   }
 
   Widget _buildHabitCard(Habit habit, bool isCompleted, {Key? key}) {
+    //check if date is future date
+    bool isFutureDate = selectedDate.isAfter(DateTime.now());
+
     return GestureDetector(
       key: key,
       onTap: () => context.push('/details/${habit.id}'),
@@ -356,6 +360,18 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
           children: [
             GestureDetector(
               onTap: () {
+                if (isFutureDate) {
+                  //show message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(context.l10n.youCannotCompleteFutureDates),
+                    ),
+                  );
+
+                  return;
+                }
+
                 ref
                     .read(habitListProvider.notifier)
                     .toggleHabitCompletion(habit.id, selectedDate);

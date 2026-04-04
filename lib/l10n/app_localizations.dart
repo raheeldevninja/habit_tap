@@ -635,6 +635,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About App'**
   String get aboutApp;
+
+  /// No description provided for @youCannotCompleteFutureDates.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot complete future dates'**
+  String get youCannotCompleteFutureDates;
 }
 
 class _AppLocalizationsDelegate
