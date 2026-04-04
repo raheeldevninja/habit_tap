@@ -52,7 +52,7 @@ class HabitIcons {
       Icons.sports_basketball,
       Icons.sports_soccer,
       Icons.sports_tennis,
-      Icons.run_circle, 
+      Icons.run_circle,
       Icons.hiking,
       Icons.surfing,
       Icons.kayaking,
@@ -126,36 +126,17 @@ class HabitIcons {
     ],
   };
 
-  static List<IconData> getAllIcons() {
-    return iconCategories.values.expand((element) => element).toList();
-  }
-
-  static List<IconData> searchIcons(String query) {
-    if (query.isEmpty) return getAllIcons();
-    final lowerQuery = query.toLowerCase();
-    
-    // Simple mock search - in a real app, you'd map icons to keywords
-    // For now, we'll return all icons if it's a generic search, or filter by category name
-    List<IconData> results = [];
-    iconCategories.forEach((category, icons) {
-      if (category.toLowerCase().contains(lowerQuery)) {
-        results.addAll(icons);
-      }
-    });
-
-    if (results.isEmpty) {
-      // If no category match, we just return a subset or all for now
-      // Ideally we'd have a map of IconData -> Keywords
-      return getAllIcons().take(50).toList(); 
-    }
-    
-    return results;
-  }
-  
   // Mapping of common habit keywords to icons
   static final Map<IconData, List<String>> _iconKeywords = {
     Icons.water_drop: ['water', 'drink', 'hydrate', 'thirst'],
-    Icons.fitness_center: ['gym', 'workout', 'weights', 'lift', 'exercise', 'fitness'],
+    Icons.fitness_center: [
+      'gym',
+      'workout',
+      'weights',
+      'lift',
+      'exercise',
+      'fitness',
+    ],
     Icons.menu_book: ['read', 'study', 'learn', 'book', 'education'],
     Icons.self_improvement: ['meditate', 'zen', 'yoga', 'mindfulness', 'calm'],
     Icons.nightlight_round: ['sleep', 'rest', 'night', 'bed'],
@@ -238,21 +219,26 @@ class HabitIcons {
     Icons.kitchen: ['cook', 'fridge'],
     Icons.stroller: ['baby', 'child'],
     Icons.child_care: ['nanny', 'kid'],
+    Icons.sanitizer: ['sanitizer', 'clean'],
   };
+
+  static List<IconData> getAllIcons() {
+    return iconCategories.values.expand((element) => element).toList();
+  }
 
   static List<IconData> searchByKeywords(String query) {
     if (query.isEmpty) return getAllIcons();
     final lowerQuery = query.toLowerCase();
-    
+
     final Set<IconData> results = {};
-    
+
     // First check keywords
     _iconKeywords.forEach((icon, keywords) {
       if (keywords.any((k) => k.contains(lowerQuery))) {
         results.add(icon);
       }
     });
-    
+
     // Then check category names if results are low
     iconCategories.forEach((category, icons) {
       if (category.toLowerCase().contains(lowerQuery)) {

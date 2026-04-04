@@ -10,31 +10,36 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
-  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     tz.initializeTimeZones();
     try {
-      final String timeZoneName = (await FlutterTimezone.getLocalTimezone()).identifier;
+      final String timeZoneName =
+          (await FlutterTimezone.getLocalTimezone()).identifier;
       tz.setLocalLocation(tz.getLocation(timeZoneName));
     } catch (e) {
       // Fallback to UTC if timezone cannot be determined
       tz.setLocalLocation(tz.getLocation('UTC'));
     }
-    
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+          macOS: initializationSettingsIOS,
+        );
 
     await _notificationsPlugin.initialize(
       initializationSettings,
@@ -57,22 +62,25 @@ class NotificationService {
   Future<bool> requestPermissions() async {
     if (Platform.isIOS) {
       final bool? result = await _notificationsPlugin
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
       return result ?? false;
     } else if (Platform.isAndroid) {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-          _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-      
-      final bool? grantedNotification = await androidImplementation?.requestNotificationsPermission();
-      
+          _notificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin
+              >();
+
+      final bool? grantedNotification = await androidImplementation
+          ?.requestNotificationsPermission();
+
       // Request exact alarm permission for Android 12+
-      final bool? grantedExactAlarm = await androidImplementation?.requestExactAlarmsPermission();
-      
+      final bool? grantedExactAlarm = await androidImplementation
+          ?.requestExactAlarmsPermission();
+
       return (grantedNotification ?? false) && (grantedExactAlarm ?? true);
     }
     return false;
@@ -96,9 +104,9 @@ class NotificationService {
     for (final int day in habit.frequency) {
       // day is 1-7 (Mon-Sun), DateTimeComponents.dayOfWeekAndTime expects weekDay
       // but the enum is slightly different in some versions or indices.
-      // In flutter_local_notifications, DateTimeComponents.dayOfWeekAndTime 
+      // In flutter_local_notifications, DateTimeComponents.dayOfWeekAndTime
       // matches the weekday of the provided TZDateTime.
-      
+
       // We need to find the "next" occurrence of this weekday
       tz.TZDateTime scheduledDate = tz.TZDateTime(
         tz.local,
@@ -112,7 +120,7 @@ class NotificationService {
       // Adjust to the correct weekday
       int daysUntilWeekday = (day - scheduledDate.weekday) % 7;
       if (daysUntilWeekday < 0) daysUntilWeekday += 7;
-      
+
       scheduledDate = scheduledDate.add(Duration(days: daysUntilWeekday));
 
       if (scheduledDate.isBefore(now)) {
