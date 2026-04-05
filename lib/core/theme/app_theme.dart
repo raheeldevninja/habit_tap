@@ -152,6 +152,9 @@ class AppTheme {
           return null;
         }),
       ),
+      listTileTheme: ListTileThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
     );
   }
 }

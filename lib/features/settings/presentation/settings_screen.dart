@@ -34,13 +34,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.l10n.settings,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(context.l10n.settings)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -264,15 +258,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: AppTheme.textLightColor,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.2,
-        ),
-      ),
+      child: Text(title, style: context.textTheme.labelLarge),
     );
   }
 
@@ -312,21 +298,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }) {
     return ListTile(
       leading: _buildIconContainer(icon),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      title: Text(title),
       subtitle: subtitle != null
           ? Text(
               subtitle,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppTheme.textLightColor,
+              style: context.textTheme.labelLarge!.copyWith(
+                fontWeight: FontWeight.normal,
               ),
             )
           : null,
-      trailing: Switch(
-        value: value,
-        onChanged: onChanged,
-        activeThumbColor: AppTheme.primaryColor,
-      ),
+      trailing: Switch(value: value, onChanged: onChanged),
     );
   }
 
@@ -339,22 +320,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }) {
     return ListTile(
       onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       leading: _buildIconContainer(icon),
-      title: Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontWeight: FontWeight.w600),
-      ),
+      title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: subtitle != null
           ? Text(
               subtitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppTheme.textLightColor,
+              style: context.textTheme.labelLarge!.copyWith(
+                fontWeight: FontWeight.normal,
               ),
             )
           : null,
@@ -397,12 +371,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }) {
     return ListTile(
       leading: _buildIconContainer(icon),
-      title: Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontWeight: FontWeight.w600),
-      ),
+      title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: Text(
         trailing,
         style: const TextStyle(
