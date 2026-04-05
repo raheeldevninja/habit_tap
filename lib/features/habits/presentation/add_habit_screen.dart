@@ -85,14 +85,10 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, size: 32),
+          icon: const Icon(Icons.chevron_left),
           onPressed: () => context.pop(),
         ),
-        title: Text(
-          context.l10n.addHabit,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: Text(context.l10n.addHabit),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -103,18 +99,8 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
             const SizedBox(height: 8),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(
-                hintText: context.l10n.habitNameHint,
-                hintStyle: const TextStyle(color: AppTheme.textLightColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: AppTheme.cardColor,
-              ),
+              decoration: InputDecoration(hintText: context.l10n.habitNameHint),
             ),
-
             const SizedBox(height: 24),
             _buildSectionLabel(
               context.l10n.selectIcon,
@@ -144,15 +130,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
   Widget _buildSectionLabel(String label, {int? previewIconCode}) {
     return Row(
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppTheme.textLightColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-            letterSpacing: 1.2,
-          ),
-        ),
+        Text(label, style: context.textTheme.labelLarge),
         if (previewIconCode != null) ...[
           const SizedBox(width: 12),
           Container(
@@ -193,8 +171,8 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
       ),
       child: GridView.builder(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 5,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
@@ -221,20 +199,19 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
                     width: 1,
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.grid_view_rounded,
                       color: AppTheme.primaryColor,
                       size: 20,
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       'More',
-                      style: TextStyle(
+                      style: context.textTheme.labelSmall!.copyWith(
                         color: AppTheme.primaryColor,
-                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -319,16 +296,11 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
               Expanded(
                 child: Text(
                   context.l10n.reminder,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
+                  style: context.textTheme.bodyLarge,
                 ),
               ),
               Switch(
                 value: _isReminderEnabled,
-                activeTrackColor: AppTheme.primaryColor.withValues(alpha: 0.5),
-                activeColor: AppTheme.primaryColor,
                 onChanged: (value) {
                   setState(() {
                     _isReminderEnabled = value;
@@ -347,9 +319,9 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
               children: [
                 Text(
                   context.l10n.notificationTime,
-                  style: const TextStyle(
+                  style: context.textTheme.bodyLarge!.copyWith(
                     color: AppTheme.textLightColor,
-                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
                 GestureDetector(

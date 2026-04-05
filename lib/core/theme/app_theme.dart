@@ -23,8 +23,8 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: backgroundColor,
         elevation: 0,
-        centerTitle: false,
-        iconTheme: IconThemeData(color: textColor),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: textColor, size: 32),
         titleTextStyle: TextStyle(
           color: textColor,
           fontSize: 24,
@@ -49,14 +49,38 @@ class AppTheme {
           fontSize: 24,
           fontWeight: FontWeight.w600,
         ),
+        headlineMedium: TextStyle(
+          color: textColor,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
         titleLarge: TextStyle(
           color: textColor,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
-        bodyLarge: TextStyle(color: textColor, fontSize: 16),
+        bodyLarge: TextStyle(
+          color: textColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
         bodyMedium: TextStyle(color: textColor, fontSize: 14),
-        labelLarge: TextStyle(color: textLightColor, fontSize: 12),
+        labelLarge: TextStyle(
+          color: textLightColor,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1.2,
+        ),
+        labelMedium: TextStyle(
+          color: textLightColor,
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
+        labelSmall: TextStyle(
+          color: textLightColor,
+          fontSize: 10,
+          fontWeight: FontWeight.normal,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -78,6 +102,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: cardColor,
+        hintStyle: TextStyle(color: textLightColor),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -108,6 +133,24 @@ class AppTheme {
         showUnselectedLabels: false,
         elevation: 8,
         type: BottomNavigationBarType.fixed,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return primaryColor;
+          }
+          return null;
+        }),
+        trackColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return primaryColor.withValues(alpha: 0.5);
+          }
+          return null;
+        }),
       ),
     );
   }

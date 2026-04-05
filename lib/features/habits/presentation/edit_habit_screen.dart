@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_theme.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
+import 'package:habit_tracker_app/core/theme/app_theme.dart';
 import '../domain/habit.dart';
 import 'habit_notifier.dart';
 
@@ -119,18 +119,14 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                 const SizedBox(height: 24),
                 Text(
                   context.l10n.deleteHabit,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: context.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 12),
                 Text(
                   context.l10n.deleteHabitConfirm,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: context.textTheme.bodyMedium!.copyWith(
                     color: AppTheme.textLightColor,
-                    fontSize: 15,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -223,14 +219,10 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(Icons.chevron_left, size: 32),
+              icon: const Icon(Icons.chevron_left),
               onPressed: () => context.pop(),
             ),
-            title: Text(
-              context.l10n.editHabit,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
+            title: Text(context.l10n.editHabit),
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
@@ -243,13 +235,6 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     hintText: context.l10n.habitNameHint,
-                    hintStyle: const TextStyle(color: AppTheme.textLightColor),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: AppTheme.cardColor,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -313,15 +298,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
   Widget _buildSectionLabel(String label, {int? previewIconCode}) {
     return Row(
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppTheme.textLightColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-            letterSpacing: 1.2,
-          ),
-        ),
+        Text(label, style: context.textTheme.labelLarge),
         if (previewIconCode != null) ...[
           const SizedBox(width: 12),
           Container(
@@ -390,20 +367,19 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                     width: 1,
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.grid_view_rounded,
                       color: AppTheme.primaryColor,
                       size: 20,
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       'More',
-                      style: TextStyle(
+                      style: context.textTheme.labelSmall!.copyWith(
                         color: AppTheme.primaryColor,
-                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -496,8 +472,6 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
               ),
               Switch(
                 value: _isReminderEnabled,
-                activeTrackColor: AppTheme.primaryColor.withValues(alpha: 0.5),
-                activeColor: AppTheme.primaryColor,
                 onChanged: (value) {
                   setState(() {
                     _isReminderEnabled = value;
@@ -516,9 +490,9 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
               children: [
                 Text(
                   context.l10n.notificationTime,
-                  style: const TextStyle(
+                  style: context.textTheme.bodyLarge!.copyWith(
                     color: AppTheme.textLightColor,
-                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
                 GestureDetector(
