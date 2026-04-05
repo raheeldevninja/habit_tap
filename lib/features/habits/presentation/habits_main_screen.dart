@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker_app/core/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habit_tracker_app/features/habits/domain/habit.dart';
 import 'package:habit_tracker_app/features/habits/presentation/habit_notifier.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
-import '../domain/habit.dart';
 
 class HabitsMainScreen extends ConsumerStatefulWidget {
   const HabitsMainScreen({super.key});
@@ -148,7 +148,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
         children: [
           Text(
             DateFormat('MMMM yyyy').format(selectedDate),
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: context.textTheme.headlineLarge,
           ),
           Row(
             children: [
@@ -273,10 +273,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                   child: Text(
                     context.l10n.dailyProgress,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: context.textTheme.titleMedium,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -294,10 +291,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
               _getProgressMessage(context, progress, total),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppTheme.textLightColor,
-                fontSize: 14,
-              ),
+              style: context.textTheme.labelMedium,
             ),
             const SizedBox(height: 16),
             ClipRRect(
@@ -319,10 +313,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
+        Text(title, style: context.textTheme.titleMedium),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
