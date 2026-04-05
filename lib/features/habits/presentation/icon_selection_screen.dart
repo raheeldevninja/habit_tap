@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habit_tracker_app/core/constants/habit_icons.dart';
+import 'package:habit_tracker_app/core/theme/app_theme.dart';
 import 'package:habit_tracker_app/l10n/app_localizations.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/constants/habit_icons.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
 
 class IconSelectionScreen extends StatefulWidget {
@@ -49,13 +49,7 @@ class _IconSelectionScreenState extends State<IconSelectionScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        title: Text(
-          l10n.selectIcon,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: AppTheme.backgroundColor,
-        elevation: 0,
+        title: Text(l10n.selectIcon),
         leading: IconButton(
           icon: const Icon(Icons.chevron_left, size: 32),
           onPressed: () => context.pop(),
@@ -72,12 +66,6 @@ class _IconSelectionScreenState extends State<IconSelectionScreen> {
                 prefixIcon: const Icon(
                   Icons.search,
                   color: AppTheme.textLightColor,
-                ),
-                filled: true,
-                fillColor: AppTheme.cardColor,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
@@ -97,10 +85,7 @@ class _IconSelectionScreenState extends State<IconSelectionScreen> {
                         const SizedBox(height: 16),
                         Text(
                           l10n.noIconsFound,
-                          style: const TextStyle(
-                            color: AppTheme.textLightColor,
-                            fontSize: 16,
-                          ),
+                          style: context.textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -126,12 +111,7 @@ class _IconSelectionScreenState extends State<IconSelectionScreen> {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Text(
             category.toUpperCase(),
-            style: const TextStyle(
-              color: AppTheme.textLightColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              letterSpacing: 1.2,
-            ),
+            style: context.textTheme.labelLarge,
           ),
         ),
       );
