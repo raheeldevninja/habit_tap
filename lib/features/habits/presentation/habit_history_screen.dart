@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habit_tracker_app/core/theme/app_theme.dart';
 import 'package:intl/intl.dart';
-import '../../../core/theme/app_theme.dart';
 import 'habit_notifier.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
 
@@ -27,14 +27,10 @@ class HabitHistoryScreen extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(Icons.chevron_left, size: 32),
+              icon: const Icon(Icons.chevron_left),
               onPressed: () => context.pop(),
             ),
-            title: Text(
-              context.l10n.habitHistory(habit.name),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
+            title: Text(context.l10n.habitHistory(habit.name)),
           ),
           body: sortedDates.isEmpty
               ? Center(
@@ -70,11 +66,7 @@ class HabitHistoryScreen extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               DateFormat('EEEE, MMMM d, yyyy').format(date),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: AppTheme.textColor,
-                              ),
+                              style: context.textTheme.bodyLarge,
                             ),
                           ),
                           const SizedBox(width: 16),
