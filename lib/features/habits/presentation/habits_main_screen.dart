@@ -362,13 +362,10 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
               onTap: () {
                 if (isFutureDate) {
                   //show message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(context.l10n.youCannotCompleteFutureDates),
-                    ),
+                  context.showSnackBar(
+                    context.l10n.youCannotCompleteFutureDates,
+                    color: Colors.red,
                   );
-
                   return;
                 }
 

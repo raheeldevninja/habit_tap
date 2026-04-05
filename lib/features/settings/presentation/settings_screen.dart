@@ -440,9 +440,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ], subject: 'HabitTracker Backup');
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.exportFailed(e.toString()))),
-        );
+        context.showSnackBar(context.l10n.exportFailed(e.toString()));
       }
     }
   }
@@ -464,16 +462,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         await ref.read(habitListProvider.notifier).importData(habits);
 
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(context.l10n.dataImported)));
+          context.showSnackBar(context.l10n.dataImported);
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.importFailed(e.toString()))),
-        );
+        context.showSnackBar(context.l10n.importFailed(e.toString()));
       }
     }
   }
@@ -497,9 +491,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               await ref.read(habitListProvider.notifier).deleteAll();
               if (context.mounted) Navigator.pop(context);
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(context.l10n.allDataDeleted)),
-                );
+                context.showSnackBar(context.l10n.allDataDeleted);
               }
             },
             child: Text(
@@ -516,9 +508,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final Uri url = Uri.parse(urlString);
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.couldNotLaunch(urlString))),
-        );
+        context.showSnackBar(context.l10n.couldNotLaunch(urlString));
       }
     }
   }

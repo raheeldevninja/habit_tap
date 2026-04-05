@@ -43,9 +43,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
 
   void _saveHabit() {
     if (_nameController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseEnterHabitName)),
-      );
+      context.showSnackBar(context.l10n.pleaseEnterHabitName);
       return;
     }
 

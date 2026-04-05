@@ -73,9 +73,8 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
 
   void _saveHabit() {
     if (_nameController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseEnterHabitName)),
-      );
+      context.showSnackBar(context.l10n.pleaseEnterHabitName);
+
       return;
     }
 
@@ -287,10 +286,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                           onPressed: _saveHabit,
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text(
-                              context.l10n.saveChanges,
-                              maxLines: 1,
-                            ),
+                            child: Text(context.l10n.saveChanges, maxLines: 1),
                           ),
                         ),
                       ),

@@ -3,4 +3,11 @@ import 'package:habit_tracker_app/l10n/app_localizations.dart';
 
 extension Context on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
+
+  //snackbar
+  void showSnackBar(String message, {Color? color = Colors.black}) {
+    ScaffoldMessenger.of(
+      this,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+  }
 }
