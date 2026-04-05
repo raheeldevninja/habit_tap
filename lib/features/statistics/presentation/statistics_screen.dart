@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habit_tracker_app/core/theme/app_theme.dart';
+import 'package:habit_tracker_app/features/habits/domain/habit.dart';
+import 'package:habit_tracker_app/features/habits/presentation/habit_notifier.dart';
 import 'package:intl/intl.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../habits/domain/habit.dart';
-import '../../habits/presentation/habit_notifier.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
 
 class StatisticsScreen extends ConsumerWidget {
@@ -19,13 +19,16 @@ class StatisticsScreen extends ConsumerWidget {
         final totalHabits = habits.length;
         final maxCurrentStreak = habits.isEmpty
             ? 0
-            : habits.map((h) => h.currentStreak).reduce((a, b) => a > b ? a : b);
+            : habits
+                  .map((h) => h.currentStreak)
+                  .reduce((a, b) => a > b ? a : b);
 
         // Weekly calculations
         final now = DateTime.now();
         final startOfThisWeek = now.subtract(Duration(days: now.weekday - 1));
-        final startOfLastWeek =
-            startOfThisWeek.subtract(const Duration(days: 7));
+        final startOfLastWeek = startOfThisWeek.subtract(
+          const Duration(days: 7),
+        );
 
         double calculateCompletionRate(DateTime startOfWeek) {
           int totalExpected = 0;
@@ -66,13 +69,7 @@ class StatisticsScreen extends ConsumerWidget {
         });
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              context.l10n.statistics,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
-          ),
+          appBar: AppBar(title: Text(context.l10n.statistics)),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -93,7 +90,7 @@ class StatisticsScreen extends ConsumerWidget {
                       child: _buildMetricCard(
                         context,
                         context.l10n.currentStreak,
-                        '${maxCurrentStreak} ${context.l10n.days}',
+                        '$maxCurrentStreak ${context.l10n.days}',
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -101,7 +98,7 @@ class StatisticsScreen extends ConsumerWidget {
                       child: _buildMetricCard(
                         context,
                         context.l10n.totalHabits,
-                        '${totalHabits} ${context.l10n.habits}',
+                        '$totalHabits ${context.l10n.habits}',
                       ),
                     ),
                   ],
@@ -160,23 +157,13 @@ class StatisticsScreen extends ConsumerWidget {
             context.l10n.weeklyCompletion,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: AppTheme.textLightColor,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+            style: context.textTheme.labelLarge,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                '$percent%',
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('$percent%', style: context.textTheme.displayLarge),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -203,10 +190,7 @@ class StatisticsScreen extends ConsumerWidget {
                       context.l10n.vsLastWeek(lastPercent),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppTheme.textLightColor,
-                        fontSize: 10,
-                      ),
+                      style: context.textTheme.labelSmall,
                     ),
                   ],
                 ),
@@ -248,14 +232,7 @@ class StatisticsScreen extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          day,
-          style: const TextStyle(
-            color: AppTheme.textLightColor,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text(day, style: context.textTheme.labelLarge),
       ],
     );
   }
@@ -297,18 +274,12 @@ class StatisticsScreen extends ConsumerWidget {
                   context.l10n.monthlyConsistency,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: context.textTheme.titleMedium,
                 ),
               ),
               Text(
                 DateFormat('MMMM yyyy').format(now),
-                style: const TextStyle(
-                  color: AppTheme.textLightColor,
-                  fontSize: 12,
-                ),
+                style: context.textTheme.labelSmall!.copyWith(fontSize: 12),
               ),
             ],
           ),
@@ -370,9 +341,7 @@ class StatisticsScreen extends ConsumerWidget {
             children: [
               Text(
                 context.l10n.less,
-                style: const TextStyle(
-                  color: AppTheme.textLightColor,
-                  fontSize: 10,
+                style: context.textTheme.labelSmall!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -394,9 +363,7 @@ class StatisticsScreen extends ConsumerWidget {
               const SizedBox(width: 8),
               Text(
                 context.l10n.more,
-                style: const TextStyle(
-                  color: AppTheme.textLightColor,
-                  fontSize: 10,
+                style: context.textTheme.labelSmall!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -428,9 +395,7 @@ class StatisticsScreen extends ConsumerWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: AppTheme.textLightColor,
-              fontSize: 10,
+            style: context.textTheme.labelSmall!.copyWith(
               fontWeight: FontWeight.bold,
               letterSpacing: 1.1,
             ),
@@ -439,10 +404,7 @@ class StatisticsScreen extends ConsumerWidget {
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            child: Text(value, style: context.textTheme.titleMedium),
           ),
         ],
       ),
