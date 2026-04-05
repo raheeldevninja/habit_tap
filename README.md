@@ -22,6 +22,7 @@ HabitTap helps users build and maintain daily habits with a simple and distracti
 
 <p align="center">
   <img src="assets/screenshots/habits_main_page.jpeg" width="250"/>
+  <img src="assets/screenshots/add_habit.jpeg" width="250"/>
   <img src="assets/screenshots/habit_details_1.jpeg" width="250"/>
   <img src="assets/screenshots/habit_details_2.jpeg" width="250"/>
   <img src="assets/screenshots/statistics.jpeg" width="250"/>
