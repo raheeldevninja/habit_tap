@@ -47,7 +47,7 @@ class AppTheme {
         headlineLarge: TextStyle(
           color: textColor,
           fontSize: 24,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.bold,
         ),
         headlineMedium: TextStyle(
           color: textColor,

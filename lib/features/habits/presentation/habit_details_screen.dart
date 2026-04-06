@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habit_tracker_app/core/theme/app_theme.dart';
+import 'package:habit_tracker_app/features/habits/domain/habit.dart';
 import 'package:intl/intl.dart';
-import '../../../core/theme/app_theme.dart';
-import '../domain/habit.dart';
 import 'habit_notifier.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
 
@@ -28,11 +28,7 @@ class HabitDetailsScreen extends ConsumerWidget {
               icon: const Icon(Icons.chevron_left, size: 32),
               onPressed: () => context.pop(),
             ),
-            title: Text(
-              context.l10n.habitDetails,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
+            title: Text(context.l10n.habitDetails),
             actions: [
               TextButton(
                 onPressed: () => context.push('/edit/${habit.id}'),
@@ -94,14 +90,7 @@ class HabitDetailsScreen extends ConsumerWidget {
           child: Icon(habit.icon, size: 40, color: AppTheme.primaryColor),
         ),
         const SizedBox(height: 16),
-        Text(
-          habit.name,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.textColor,
-          ),
-        ),
+        Text(habit.name, style: context.textTheme.headlineLarge),
         const SizedBox(height: 4),
         Text(
           habit.category.isNotEmpty ? habit.category : context.l10n.general,
@@ -158,6 +147,7 @@ class HabitDetailsScreen extends ConsumerWidget {
       children: [
         Expanded(
           child: _buildStatCard(
+            context: context,
             label: context.l10n.currentStreak.toUpperCase(),
             value: '${habit.currentStreak} days',
             trend: currentStreakTrend,
@@ -168,6 +158,7 @@ class HabitDetailsScreen extends ConsumerWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildStatCard(
+            context: context,
             label: context.l10n.bestStreak.toUpperCase(),
             value: '${habit.bestStreak} days',
             trend: bestStreakTrend,
@@ -180,6 +171,7 @@ class HabitDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildStatCard({
+    required BuildContext context,
     required String label,
     required String value,
     required String trend,
@@ -202,23 +194,12 @@ class HabitDetailsScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppTheme.textLightColor,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
-          ),
+          Text(label, style: context.textTheme.labelLarge),
           const SizedBox(height: 8),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            child: Text(value, style: context.textTheme.headlineLarge),
           ),
           const SizedBox(height: 8),
           Row(
@@ -230,10 +211,8 @@ class HabitDetailsScreen extends ConsumerWidget {
                   trend,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: context.textTheme.labelLarge!.copyWith(
                     color: trendColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -263,10 +242,7 @@ class HabitDetailsScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          context.l10n.weeklyProgress,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        Text(context.l10n.weeklyProgress, style: context.textTheme.titleMedium),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
@@ -288,14 +264,7 @@ class HabitDetailsScreen extends ConsumerWidget {
                 children: List.generate(7, (index) {
                   return Column(
                     children: [
-                      Text(
-                        days[index],
-                        style: const TextStyle(
-                          color: AppTheme.textLightColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text(days[index], style: context.textTheme.labelLarge),
                       const SizedBox(height: 12),
                       Container(
                         width: 32,
@@ -314,11 +283,7 @@ class HabitDetailsScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               Text(
                 context.l10n.daysCompletedThisWeek(count, expectedCount),
-                style: const TextStyle(
-                  color: AppTheme.textLightColor,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: context.textTheme.labelLarge,
               ),
             ],
           ),
@@ -340,7 +305,7 @@ class HabitDetailsScreen extends ConsumerWidget {
       children: [
         Text(
           context.l10n.monthlyProgress,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: context.textTheme.titleMedium,
         ),
         const SizedBox(height: 16),
         Container(
@@ -400,18 +365,14 @@ class HabitDetailsScreen extends ConsumerWidget {
                 children: [
                   Text(
                     DateFormat('MMM 1').format(firstDayOfMonth),
-                    style: const TextStyle(
-                      color: AppTheme.textLightColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                    style: context.textTheme.labelLarge!.copyWith(
+                      letterSpacing: 1,
                     ),
                   ),
                   Text(
                     DateFormat('MMM d').format(lastDayOfMonth),
-                    style: const TextStyle(
-                      color: AppTheme.textLightColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                    style: context.textTheme.labelLarge!.copyWith(
+                      letterSpacing: 1,
                     ),
                   ),
                 ],
@@ -427,10 +388,7 @@ class HabitDetailsScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          context.l10n.schedule,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        Text(context.l10n.schedule, style: context.textTheme.titleMedium),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
@@ -465,10 +423,7 @@ class HabitDetailsScreen extends ConsumerWidget {
                   children: [
                     Text(
                       context.l10n.reminder,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                      style: context.textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 4),
                     habit.isReminderEnabled
@@ -478,9 +433,8 @@ class HabitDetailsScreen extends ConsumerWidget {
                                 : habit.frequency
                                       .map((d) => _getWeekdayName(context, d))
                                       .join(', '),
-                            style: const TextStyle(
-                              color: AppTheme.textLightColor,
-                              fontSize: 13,
+                            style: context.textTheme.labelLarge!.copyWith(
+                              fontWeight: FontWeight.normal,
                             ),
                           )
                         : SizedBox(),
@@ -533,7 +487,7 @@ class HabitDetailsScreen extends ConsumerWidget {
           children: [
             Text(
               context.l10n.recentHistory,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: context.textTheme.titleMedium,
             ),
             if (sortedDates.length > 3)
               TextButton(
@@ -555,7 +509,7 @@ class HabitDetailsScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Text(
               context.l10n.noHistoryYet,
-              style: const TextStyle(color: AppTheme.textLightColor),
+              style: context.textTheme.labelMedium,
             ),
           ),
         ...displayDates.map((date) {
@@ -577,10 +531,7 @@ class HabitDetailsScreen extends ConsumerWidget {
               children: [
                 Text(
                   DateFormat('EEEE, MMMM d, yyyy').format(date),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
+                  style: context.textTheme.bodyMedium,
                 ),
                 const Spacer(),
                 const Icon(
