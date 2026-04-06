@@ -464,10 +464,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
               Expanded(
                 child: Text(
                   context.l10n.reminder,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
+                  style: context.textTheme.bodyLarge,
                 ),
               ),
               Switch(
@@ -510,7 +507,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                       children: [
                         Text(
                           _notificationTime.format(context),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: context.textTheme.titleSmall,
                         ),
                         const SizedBox(width: 8),
                         const Icon(
