@@ -339,7 +339,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
                       children: [
                         Text(
                           _notificationTime.format(context),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: context.textTheme.titleSmall,
                         ),
                         const SizedBox(width: 8),
                         const Icon(
