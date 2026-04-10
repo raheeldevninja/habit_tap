@@ -26,9 +26,16 @@ HabitTap helps users build and maintain daily habits with a simple and distracti
   <img src="assets/screenshots/habit_details_1.jpeg" width="250"/>
   <img src="assets/screenshots/habit_details_2.jpeg" width="250"/>
   <img src="assets/screenshots/statistics.jpeg" width="250"/>
-  <img src="assets/screenshots/settings.jpeg" width="250"/>
+  <img src="assets/screenshots/updated_settings_screen_light_mode.jpeg" width="250"/>
   <img src="assets/screenshots/update_habit.jpeg" width="250"/>
   <img src="assets/screenshots/delete_all_data.jpeg" width="250"/>
+
+  <img src="assets/screenshots/habits_main_dark_mode.jpeg" width="250"/>
+  <img src="assets/screenshots/add_habit_dark_mode.jpeg" width="250"/>
+  <img src="assets/screenshots/settings_screen_dark_mode.jpeg" width="250"/>
+  <img src="assets/screenshots/statistics_screen_dark_mode.jpeg" width="250"/>
+  <img src="assets/screenshots/theme_mode.jpeg" width="250"/>
+  
 </p>
 
 ## ✨ Features
