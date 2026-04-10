@@ -6,6 +6,7 @@ import 'package:habit_tracker_app/features/habits/presentation/habit_notifier.da
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
+import 'package:confetti/confetti.dart';
 
 class HabitsMainScreen extends ConsumerStatefulWidget {
   const HabitsMainScreen({super.key});
@@ -16,116 +17,206 @@ class HabitsMainScreen extends ConsumerStatefulWidget {
 
 class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
   DateTime selectedDate = DateTime.now();
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final habitsAsync = ref.watch(habitListProvider);
 
-    return Scaffold(
-      body: SafeArea(
-        child: habitsAsync.when(
-          data: (habits) {
-            // Filter habits for the selected day based on their frequency
-            final activeHabitsForDay = habits
+    ref.listen(habitListProvider, (previous, next) {
+      if (next.hasValue && next.value != null) {
+        final habits = next.value!;
+        final activeCount = habits
+            .where(
+              (h) =>
+                  h.frequency.contains(selectedDate.weekday) &&
+                  !h.completedDates.any((d) => _isSameDay(d, selectedDate)),
+            )
+            .length;
+        final completedCount = habits
+            .where(
+              (h) =>
+                  h.frequency.contains(selectedDate.weekday) &&
+                  h.completedDates.any((d) => _isSameDay(d, selectedDate)),
+            )
+            .length;
+
+        if (activeCount == 0 && completedCount > 0) {
+          // Only play confetti if we are transitioning from a state that was NOT done
+          bool wasIncompleteBefore = false;
+          if (previous != null && previous.hasValue && previous.value != null) {
+            final prevHabits = previous.value!;
+            final prevActiveCount = prevHabits
                 .where(
                   (h) =>
                       h.frequency.contains(selectedDate.weekday) &&
                       !h.completedDates.any((d) => _isSameDay(d, selectedDate)),
                 )
-                .toList();
+                .length;
+            if (prevActiveCount > 0) {
+              wasIncompleteBefore = true;
+            }
+          }
 
-            final completedHabitsForDay = habits
-                .where(
-                  (h) =>
-                      h.frequency.contains(selectedDate.weekday) &&
-                      h.completedDates.any((d) => _isSameDay(d, selectedDate)),
-                )
-                .toList();
+          if (wasIncompleteBefore) {
+            _confettiController.play();
+          }
+        }
+      }
+    });
 
-            int totalForDay =
-                activeHabitsForDay.length + completedHabitsForDay.length;
-            double progress = totalForDay == 0
-                ? 0.0
-                : completedHabitsForDay.length / totalForDay;
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(),
-                const SizedBox(height: 16),
-                _buildCalendarStrip(),
-                const SizedBox(height: 24),
-                _buildProgressCard(
-                  context,
-                  progress,
-                  completedHabitsForDay.length,
-                  totalForDay,
-                ),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    children: [
-                      if (activeHabitsForDay.isNotEmpty) ...[
-                        _buildSectionHeader(
-                          context.l10n.todayHabits,
-                          "${activeHabitsForDay.length} ${context.l10n.left}",
-                        ),
-                        const SizedBox(height: 12),
-                        ...activeHabitsForDay.map(
-                          (h) => _buildHabitCard(h, false),
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-                      if (completedHabitsForDay.isNotEmpty) ...[
-                        Text(
-                          context.l10n.completed,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: context.textTheme.labelLarge?.color,
-                            letterSpacing: 1.2,
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            habitsAsync.when(
+              data: (habits) {
+                // Filter habits for the selected day based on their frequency
+                final activeHabitsForDay = habits
+                    .where(
+                      (h) =>
+                          h.frequency.contains(selectedDate.weekday) &&
+                          !h.completedDates.any(
+                            (d) => _isSameDay(d, selectedDate),
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        ...[
-                          SizedBox(height: 10), // Add this temporary dummy
-                          ...completedHabitsForDay.map(
-                            (h) =>
-                                _buildHabitCard(h, true, key: ValueKey(h.id)),
+                    )
+                    .toList();
+
+                final completedHabitsForDay = habits
+                    .where(
+                      (h) =>
+                          h.frequency.contains(selectedDate.weekday) &&
+                          h.completedDates.any(
+                            (d) => _isSameDay(d, selectedDate),
                           ),
+                    )
+                    .toList();
+
+                int totalForDay =
+                    activeHabitsForDay.length + completedHabitsForDay.length;
+                double progress = totalForDay == 0
+                    ? 0.0
+                    : completedHabitsForDay.length / totalForDay;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 16),
+                    _buildCalendarStrip(),
+                    const SizedBox(height: 24),
+                    _buildProgressCard(
+                      context,
+                      progress,
+                      completedHabitsForDay.length,
+                      totalForDay,
+                    ),
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        children: [
+                          if (activeHabitsForDay.isNotEmpty) ...[
+                            _buildSectionHeader(
+                              context.l10n.todayHabits,
+                              "${activeHabitsForDay.length} ${context.l10n.left}",
+                            ),
+                            const SizedBox(height: 12),
+                            ...activeHabitsForDay.map(
+                              (h) => _buildHabitCard(h, false),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                          if (completedHabitsForDay.isNotEmpty) ...[
+                            Text(
+                              context.l10n.completed,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: context.textTheme.labelLarge?.color,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            ...[
+                              SizedBox(height: 10), // Add this temporary dummy
+                              ...completedHabitsForDay.map(
+                                (h) => _buildHabitCard(
+                                  h,
+                                  true,
+                                  key: ValueKey(h.id),
+                                ),
+                              ),
+                            ],
+                          ],
+                          const SizedBox(height: 80), // Padding for FAB
                         ],
-                      ],
-                      const SizedBox(height: 80), // Padding for FAB
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              loading: () => const Center(
+                child: CircularProgressIndicator(color: AppTheme.primaryColor),
+              ),
+              error: (error, stack) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 48,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error loading habits: $error',
+                      style: TextStyle(
+                        color: context.textTheme.labelLarge?.color,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () => ref.invalidate(habitListProvider),
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Refresh'),
+                    ),
+                  ],
                 ),
-              ],
-            );
-          },
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: AppTheme.primaryColor),
-          ),
-          error: (error, stack) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, color: Colors.red, size: 48),
-                const SizedBox(height: 16),
-                Text(
-                  'Error loading habits: $error',
-                  style: TextStyle(color: context.textTheme.labelLarge?.color),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed: () => ref.invalidate(habitListProvider),
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Refresh'),
-                ),
-              ],
+              ),
             ),
-          ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: false,
+                numberOfParticles: 100,
+                colors: const [
+                  AppTheme.primaryColor,
+                  Colors.blue,
+                  Colors.orange,
+                  Colors.purple,
+                  Colors.pink,
+                ],
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -228,7 +319,9 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                   Text(
                     date.day.toString(),
                     style: TextStyle(
-                      color: isSelected ? Colors.white : context.colorScheme.onSurface,
+                      color: isSelected
+                          ? Colors.white
+                          : context.colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -257,7 +350,9 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.04),
+              color: Colors.black.withValues(
+                alpha: context.isDarkMode ? 0.2 : 0.04,
+              ),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -298,7 +393,9 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
                 value: progress,
-                backgroundColor: context.colorScheme.outlineVariant.withValues(alpha: 0.2),
+                backgroundColor: context.colorScheme.outlineVariant.withValues(
+                  alpha: 0.2,
+                ),
                 color: AppTheme.primaryColor,
                 minHeight: 12,
               ),
