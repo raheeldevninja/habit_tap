@@ -16,6 +16,7 @@ HabitTap helps users build and maintain daily habits with a simple and distracti
 
 <p align="center">
   <img src="assets/habit_tap.gif" width="300" />
+  <img src="assets/dark_mode_and_confeti.gif" width="300" />
 </p>
 
 ## 📸 Screenshots
