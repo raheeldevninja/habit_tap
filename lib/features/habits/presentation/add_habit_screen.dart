@@ -136,7 +136,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              color: context.primaryColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -159,7 +159,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -195,7 +195,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
                   color: AppTheme.backgroundColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                    color: context.primaryColor.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),
@@ -247,8 +247,8 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.primaryColor.withValues(alpha: 0.2)
-              : AppTheme.backgroundColor,
+              ? context.primaryColor.withValues(alpha: 0.2)
+              : context.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(12),
           border: isSelected
               ? Border.all(color: AppTheme.primaryColor, width: 2)
@@ -267,7 +267,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -284,7 +284,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                  color: context.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
@@ -332,7 +332,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: AppTheme.backgroundColor,
+                      color: context.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(

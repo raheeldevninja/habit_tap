@@ -112,7 +112,7 @@ class HabitDetailsScreen extends ConsumerWidget {
 
     if (habit.currentStreak == 0) {
       currentStreakTrend = context.l10n.noStreakYet;
-      currentStreakTrendColor = AppTheme.textLightColor;
+      currentStreakTrendColor = context.textTheme.labelLarge?.color ?? Colors.grey;
       currentStreakTrendIcon = Icons.info_outline;
     } else if (habit.currentStreak >= habit.bestStreak &&
         habit.bestStreak > 0) {
@@ -135,7 +135,7 @@ class HabitDetailsScreen extends ConsumerWidget {
 
     if (habit.bestStreak == 0) {
       bestStreakTrend = context.l10n.startYourJourney;
-      bestStreakTrendColor = AppTheme.textLightColor;
+      bestStreakTrendColor = context.textTheme.labelLarge?.color ?? Colors.grey;
       bestStreakTrendIcon = Icons.play_arrow;
     } else {
       bestStreakTrend = context.l10n.allTimeRecord;
@@ -181,11 +181,11 @@ class HabitDetailsScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -247,11 +247,11 @@ class HabitDetailsScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppTheme.cardColor,
+            color: context.cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.02),
+                color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.02),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -272,7 +272,7 @@ class HabitDetailsScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: completions[index]
                               ? AppTheme.primaryColor
-                              : AppTheme.backgroundColor,
+                              : context.colorScheme.outlineVariant.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
@@ -311,11 +311,11 @@ class HabitDetailsScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppTheme.cardColor,
+            color: context.cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.02),
+                color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.02),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -344,7 +344,7 @@ class HabitDetailsScreen extends ConsumerWidget {
                   );
                   final isExpected = habit.frequency.contains(date.weekday);
 
-                  Color boxColor = AppTheme.backgroundColor;
+                  Color boxColor = context.colorScheme.outlineVariant.withValues(alpha: 0.1);
                   if (isCompleted) {
                     boxColor = AppTheme.primaryColor;
                   } else if (isExpected && date.isBefore(now)) {
@@ -393,7 +393,7 @@ class HabitDetailsScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppTheme.cardColor,
+            color: context.cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
@@ -447,7 +447,9 @@ class HabitDetailsScreen extends ConsumerWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
+                  color: !habit.isReminderEnabled
+                      ? context.colorScheme.outlineVariant.withValues(alpha: 0.1)
+                      : context.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -460,8 +462,8 @@ class HabitDetailsScreen extends ConsumerWidget {
                       : '08:00 AM',
                   style: TextStyle(
                     color: !habit.isReminderEnabled
-                        ? AppTheme.textLightColor
-                        : Colors.orange.shade800,
+                        ? context.textTheme.labelLarge?.color
+                        : context.primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
@@ -495,7 +497,7 @@ class HabitDetailsScreen extends ConsumerWidget {
                 child: Text(
                   context.l10n.seeAll,
                   style: TextStyle(
-                    color: Colors.orange.shade800,
+                    color: context.primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
@@ -517,11 +519,11 @@ class HabitDetailsScreen extends ConsumerWidget {
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.cardColor,
+              color: context.cardColor,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.02),
+                  color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.02),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

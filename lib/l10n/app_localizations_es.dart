@@ -88,6 +88,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appearance => 'Apariencia';
 
   @override
+  String get theme => 'Tema';
+
+  @override
+  String get system => 'Sistema';
+
+  @override
+  String get light => 'Claro';
+
+  @override
+  String get dark => 'Oscuro';
+
+  @override
+  String get reminders => 'Recordatorios';
+
+  @override
   String get darkMode => 'Modo Oscuro';
 
   @override

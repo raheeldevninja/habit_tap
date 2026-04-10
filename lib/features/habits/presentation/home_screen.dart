@@ -27,10 +27,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (location == '/' ||
         location.startsWith('/add') ||
         location.startsWith('/edit') ||
-        location.startsWith('/details'))
+        location.startsWith('/details')) {
       return 0;
-    if (location.startsWith('/statistics')) return 1;
-    if (location.startsWith('/settings')) return 2;
+    }
+    if (location.startsWith('/statistics')) {
+      return 1;
+    }
+    if (location.startsWith('/settings')) {
+      return 2;
+    }
 
     return 0;
   }

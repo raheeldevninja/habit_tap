@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/locale_provider.dart';
+import '../../../core/providers/theme_provider.dart';
 import '../../habits/data/habit_repository.dart';
 import '../../habits/presentation/habit_notifier.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
@@ -40,7 +41,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionHeader(context.l10n.appearance),
+            _buildSectionHeader(context.l10n.reminders),
             _buildSettingsGroup([
               _buildToggleItem(
                 icon: Icons.notifications,
@@ -56,6 +57,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 },
               ),
             ]),
+            const SizedBox(height: 24),
+            _buildSectionHeader(context.l10n.appearance),
+            _buildThemeTile(context, ref),
             const SizedBox(height: 24),
             _buildSectionHeader(context.l10n.language),
             _buildLanguageTile(context, ref),
@@ -121,12 +125,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'HABITTAP',
                     style: TextStyle(
                       letterSpacing: 2,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.textLightColor,
+                      color: context.textTheme.labelLarge?.color,
                       fontSize: 14,
                     ),
                   ),
@@ -137,6 +141,111 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildThemeTile(BuildContext context, WidgetRef ref) {
+    final currentTheme = ref.watch(themeProvider);
+    final String currentThemeLabel = _getThemeLabel(currentTheme);
+
+    return _buildSettingsGroup([
+      _buildNavigationItem(
+        icon: Icons.palette_outlined,
+        title: context.l10n.theme,
+        subtitle: currentThemeLabel,
+        onTap: () => _showThemeDialog(context, ref, currentTheme),
+      ),
+    ]);
+  }
+
+  String _getThemeLabel(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return context.l10n.light;
+      case ThemeMode.dark:
+        return context.l10n.dark;
+      case ThemeMode.system:
+        return context.l10n.system;
+    }
+  }
+
+  void _showThemeDialog(
+    BuildContext context,
+    WidgetRef ref,
+    ThemeMode currentTheme,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(context.l10n.theme),
+        contentPadding: const EdgeInsets.symmetric(vertical: 20),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildThemeOption(
+              context,
+              ref,
+              context.l10n.system,
+              ThemeMode.system,
+              currentTheme,
+              Icons.brightness_auto,
+            ),
+            _buildThemeOption(
+              context,
+              ref,
+              context.l10n.light,
+              ThemeMode.light,
+              currentTheme,
+              Icons.light_mode,
+            ),
+            _buildThemeOption(
+              context,
+              ref,
+              context.l10n.dark,
+              ThemeMode.dark,
+              currentTheme,
+              Icons.dark_mode,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThemeOption(
+    BuildContext context,
+    WidgetRef ref,
+    String label,
+    ThemeMode mode,
+    ThemeMode currentTheme,
+    IconData icon,
+  ) {
+    final isSelected = currentTheme == mode;
+
+    return ListTile(
+      leading: _buildIconContainer(
+        icon,
+        color: isSelected
+            ? AppTheme.primaryColor.withValues(alpha: 0.1)
+            : Colors.transparent,
+        iconColor: isSelected
+            ? AppTheme.primaryColor
+            : Theme.of(context).hintColor,
+      ),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected ? AppTheme.primaryColor : null,
+        ),
+      ),
+      trailing: isSelected
+          ? const Icon(Icons.check_circle, color: AppTheme.primaryColor)
+          : null,
+      onTap: () {
+        ref.read(themeProvider.notifier).setThemeMode(mode);
+        Navigator.pop(context);
+      },
     );
   }
 
@@ -234,7 +343,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         child: Icon(
           Icons.language,
-          color: isSelected ? AppTheme.primaryColor : AppTheme.textLightColor,
+          color: isSelected
+              ? context.primaryColor
+              : context.textTheme.labelLarge?.color,
           size: 20,
         ),
       ),
@@ -242,7 +353,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         label,
         style: TextStyle(
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? AppTheme.primaryColor : AppTheme.textColor,
+          color: isSelected
+              ? context.primaryColor
+              : context.colorScheme.onSurface,
         ),
       ),
       trailing: isSelected
@@ -265,11 +378,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget _buildSettingsGroup(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(
+              alpha: context.isDarkMode ? 0.2 : 0.02,
+            ),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -332,33 +447,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             )
           : null,
-      trailing: Icon(trailingIcon, color: AppTheme.textLightColor, size: 20),
+      trailing: Icon(
+        trailingIcon,
+        color: context.textTheme.labelLarge?.color,
+        size: 20,
+      ),
     );
   }
 
   Widget _buildButtonItem({
     required IconData icon,
     required String title,
-    Color titleColor = AppTheme.textColor,
+    Color? titleColor,
     required VoidCallback onTap,
   }) {
+    final effectiveTitleColor = titleColor ?? context.colorScheme.onSurface;
     return ListTile(
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       leading: _buildIconContainer(
         icon,
-        color: titleColor.withValues(alpha: 0.1),
-        iconColor: titleColor,
+        color: effectiveTitleColor.withValues(alpha: 0.1),
+        iconColor: effectiveTitleColor,
       ),
       title: Text(
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontWeight: FontWeight.w600, color: titleColor),
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: effectiveTitleColor,
+        ),
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
-        color: titleColor.withValues(alpha: 0.5),
+        color: effectiveTitleColor.withValues(alpha: 0.5),
         size: 14,
       ),
     );
@@ -374,8 +497,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: Text(
         trailing,
-        style: const TextStyle(
-          color: AppTheme.textLightColor,
+        style: TextStyle(
+          color: context.textTheme.labelLarge?.color,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -404,9 +527,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       final file = File('${directory.path}/habits_backup.json');
       await file.writeAsString(jsonString);
 
-      await Share.shareXFiles([
-        XFile(file.path),
-      ], subject: 'HabitTracker Backup');
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(file.path)], subject: 'HabitTracker Backup'),
+      );
     } catch (e) {
       if (mounted) {
         context.showSnackBar(context.l10n.exportFailed(e.toString()));
@@ -452,7 +575,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               context.l10n.cancel,
-              style: const TextStyle(color: AppTheme.textLightColor),
+              style: TextStyle(color: context.textTheme.labelLarge?.color),
             ),
           ),
           TextButton(

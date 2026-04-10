@@ -88,6 +88,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get appearance => 'Aussehen';
 
   @override
+  String get theme => 'Thema';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get light => 'Hell';
+
+  @override
+  String get dark => 'Dunkel';
+
+  @override
+  String get reminders => 'Erinnerungen';
+
+  @override
   String get darkMode => 'Dunkelmodus';
 
   @override

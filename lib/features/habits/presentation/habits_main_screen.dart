@@ -80,10 +80,10 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                       if (completedHabitsForDay.isNotEmpty) ...[
                         Text(
                           context.l10n.completed,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.textLightColor,
+                            color: context.textTheme.labelLarge?.color,
                             letterSpacing: 1.2,
                           ),
                         ),
@@ -114,7 +114,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                 const SizedBox(height: 16),
                 Text(
                   'Error loading habits: $error',
-                  style: const TextStyle(color: AppTheme.textLightColor),
+                  style: TextStyle(color: context.textTheme.labelLarge?.color),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -218,8 +218,8 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                     DateFormat('E').format(date).substring(0, 1),
                     style: TextStyle(
                       color: isSelected
-                          ? Colors.black87
-                          : AppTheme.textLightColor,
+                          ? Colors.white
+                          : context.textTheme.labelLarge?.color,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -228,7 +228,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                   Text(
                     date.day.toString(),
                     style: TextStyle(
-                      color: isSelected ? Colors.black : Colors.black87,
+                      color: isSelected ? Colors.white : context.colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -253,11 +253,11 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppTheme.cardColor,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.04),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -298,7 +298,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
                 value: progress,
-                backgroundColor: AppTheme.dividerColor,
+                backgroundColor: context.colorScheme.outlineVariant.withValues(alpha: 0.2),
                 color: AppTheme.primaryColor,
                 minHeight: 12,
               ),
@@ -344,7 +344,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppTheme.cardColor,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -375,7 +375,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                   border: Border.all(
                     color: isCompleted
                         ? AppTheme.primaryColor
-                        : AppTheme.dividerColor,
+                        : context.colorScheme.outlineVariant,
                     width: 2,
                   ),
                 ),
@@ -397,8 +397,8 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: isCompleted
-                          ? AppTheme.textLightColor
-                          : AppTheme.textColor,
+                          ? context.textTheme.labelLarge?.color
+                          : context.colorScheme.onSurface,
                       decoration: isCompleted
                           ? TextDecoration.lineThrough
                           : null,
@@ -410,7 +410,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: AppTheme.textLightColor,
+                        color: context.textTheme.labelLarge?.color,
                         fontSize: 13,
                         decoration: isCompleted
                             ? TextDecoration.lineThrough
@@ -428,7 +428,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                           Icons.access_time,
                           size: 14,
                           color: isCompleted
-                              ? AppTheme.dividerColor
+                              ? context.colorScheme.outlineVariant
                               : AppTheme.primaryColor,
                         ),
                         const SizedBox(width: 4),
@@ -438,7 +438,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                           ).format(context),
                           style: TextStyle(
                             color: isCompleted
-                                ? AppTheme.dividerColor
+                                ? context.colorScheme.outlineVariant
                                 : AppTheme.primaryColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -452,7 +452,7 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
             Icon(
               habit.icon,
               color: isCompleted
-                  ? AppTheme.dividerColor
+                  ? context.colorScheme.outlineVariant
                   : AppTheme.primaryColor,
             ),
           ],

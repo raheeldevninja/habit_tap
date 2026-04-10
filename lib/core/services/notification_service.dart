@@ -50,13 +50,11 @@ class NotificationService {
 
   static void _onDidReceiveNotificationResponse(NotificationResponse response) {
     // Handle notification tap in foreground/background
-    print('Notification tapped: ${response.payload}');
   }
 
   @pragma('vm:entry-point')
   static void _notificationTapBackground(NotificationResponse response) {
     // Handle notification tap when app is in background/killed
-    print('Notification tapped in background: ${response.payload}');
   }
 
   Future<bool> requestPermissions() async {

@@ -88,6 +88,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appearance => 'Apparence';
 
   @override
+  String get theme => 'Thème';
+
+  @override
+  String get system => 'Système';
+
+  @override
+  String get light => 'Clair';
+
+  @override
+  String get dark => 'Sombre';
+
+  @override
+  String get reminders => 'Rappels';
+
+  @override
   String get darkMode => 'Mode Sombre';
 
   @override

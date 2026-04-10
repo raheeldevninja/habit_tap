@@ -111,10 +111,14 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.red.shade50,
+                    color: context.colorScheme.error.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.delete, color: Colors.red, size: 32),
+                  child: Icon(
+                    Icons.delete,
+                    color: context.colorScheme.error,
+                    size: 32,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Text(
@@ -126,7 +130,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                   context.l10n.deleteHabitConfirm,
                   textAlign: TextAlign.center,
                   style: context.textTheme.bodyMedium!.copyWith(
-                    color: AppTheme.textLightColor,
+                    color: context.textTheme.labelLarge?.color,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -164,8 +168,9 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                   height: 56,
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.blueGrey.withValues(alpha: 0.05),
-                      foregroundColor: AppTheme.textColor,
+                      backgroundColor: context.colorScheme.outlineVariant
+                          .withValues(alpha: 0.1),
+                      foregroundColor: context.colorScheme.onSurface,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -254,8 +259,9 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                         height: 56,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red.shade50,
-                            foregroundColor: Colors.red,
+                            backgroundColor: context.colorScheme.error
+                                .withValues(alpha: 0.1),
+                            foregroundColor: context.colorScheme.error,
                           ),
                           onPressed: _confirmDelete,
                           child: Text(context.l10n.delete),
@@ -304,7 +310,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              color: context.primaryColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -327,11 +333,13 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(
+              alpha: context.isDarkMode ? 0.2 : 0.02,
+            ),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -360,10 +368,10 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppTheme.backgroundColor,
+                  color: context.scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                    color: context.primaryColor.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),
@@ -415,8 +423,8 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.primaryColor.withValues(alpha: 0.2)
-              : AppTheme.backgroundColor,
+              ? context.primaryColor.withValues(alpha: 0.2)
+              : context.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(12),
           border: isSelected
               ? Border.all(color: AppTheme.primaryColor, width: 2)
@@ -424,7 +432,9 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
         ),
         child: Icon(
           icon,
-          color: isSelected ? AppTheme.primaryColor : AppTheme.textLightColor,
+          color: isSelected
+              ? context.primaryColor
+              : context.textTheme.labelLarge?.color,
           size: 24,
         ),
       ),
@@ -435,11 +445,13 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(
+              alpha: context.isDarkMode ? 0.2 : 0.02,
+            ),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -452,7 +464,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                  color: context.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
@@ -488,7 +500,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                 Text(
                   context.l10n.notificationTime,
                   style: context.textTheme.bodyLarge!.copyWith(
-                    color: AppTheme.textLightColor,
+                    color: context.textTheme.labelLarge?.color,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
@@ -500,7 +512,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: AppTheme.backgroundColor,
+                      color: context.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -510,10 +522,10 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
                           style: context.textTheme.titleSmall,
                         ),
                         const SizedBox(width: 8),
-                        const Icon(
+                        Icon(
                           Icons.access_time,
                           size: 16,
-                          color: AppTheme.textLightColor,
+                          color: context.textTheme.labelLarge?.color,
                         ),
                       ],
                     ),

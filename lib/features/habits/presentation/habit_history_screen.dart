@@ -36,8 +36,8 @@ class HabitHistoryScreen extends ConsumerWidget {
               ? Center(
                   child: Text(
                     context.l10n.noHistoryYet,
-                    style: const TextStyle(
-                      color: AppTheme.textLightColor,
+                    style: TextStyle(
+                      color: context.textTheme.labelLarge?.color,
                       fontSize: 16,
                     ),
                   ),
@@ -51,11 +51,11 @@ class HabitHistoryScreen extends ConsumerWidget {
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.cardColor,
+                        color: context.cardColor,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.02),
+                            color: Colors.black.withValues(alpha: context.isDarkMode ? 0.2 : 0.02),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),

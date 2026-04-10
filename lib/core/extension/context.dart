@@ -6,10 +6,21 @@ extension Context on BuildContext {
 
   TextTheme get textTheme => Theme.of(this).textTheme;
 
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+
+  Color get cardColor => Theme.of(this).cardColor;
+
+  Color get scaffoldBackgroundColor => Theme.of(this).scaffoldBackgroundColor;
+
+  Color get primaryColor => Theme.of(this).primaryColor;
+
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
   //snackbar
-  void showSnackBar(String message, {Color? color = Colors.black}) {
+  void showSnackBar(String message, {Color? color}) {
+    final effectiveColor = color ?? (isDarkMode ? Colors.grey[800] : Colors.black);
     ScaffoldMessenger.of(
       this,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: effectiveColor));
   }
 }
