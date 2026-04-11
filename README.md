@@ -49,9 +49,11 @@ HabitTap helps users build and maintain daily habits with a simple and distracti
 - Current streak & best streak  
 
 - 📈 Global statistics dashboard  
+- Confetti animation when all habits are completed
 
 ### ⚙️ Settings
 - Multi-language support  
+- Dark mode and light mode  
 - Notification toggle  
 - JSON backup (import/export)  
 - Full data reset  
