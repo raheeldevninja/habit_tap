@@ -188,6 +188,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Amazing job! You\'ve completed everything for today.';
 
   @override
+  String get allHabitsDoneToday => 'All habits for today are completed!';
+
+  @override
   String get edit => 'Edit';
 
   @override
@@ -314,4 +317,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youCannotCompleteFutureDates => 'You cannot complete future dates';
+
+  @override
+  String get continueBtn => 'Continue';
 }

@@ -187,6 +187,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get amazingJob => '¡Increíble trabajo! Has completado todo por hoy.';
 
   @override
+  String get allHabitsDoneToday =>
+      '¡Todos los hábitos de hoy están completados!';
+
+  @override
   String get edit => 'Editar';
 
   @override
@@ -315,4 +319,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get youCannotCompleteFutureDates =>
       'No puedes completar fechas futuras';
+
+  @override
+  String get continueBtn => 'Continuar';
 }

@@ -7,6 +7,39 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:habit_tracker_app/core/extension/context.dart';
 import 'package:confetti/confetti.dart';
+import 'package:habit_tracker_app/features/habits/presentation/widgets/celebration_dialog.dart';
+
+enum HabitListItemType { header, habit }
+
+class HabitListItem {
+  final HabitListItemType type;
+  final Habit? habit;
+  final String? title;
+  final String? badge;
+  final bool isCompleted;
+
+  HabitListItem.habit(this.habit, this.isCompleted)
+    : type = HabitListItemType.habit,
+      title = null,
+      badge = null;
+  HabitListItem.header(this.title, {this.badge})
+    : type = HabitListItemType.header,
+      habit = null,
+      isCompleted = false;
+
+  String get id =>
+      type == HabitListItemType.habit ? "${habit!.id}_$isCompleted" : "header_$title";
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HabitListItem &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+}
 
 class HabitsMainScreen extends ConsumerStatefulWidget {
   const HabitsMainScreen({super.key});
@@ -18,6 +51,12 @@ class HabitsMainScreen extends ConsumerStatefulWidget {
 class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
   DateTime selectedDate = DateTime.now();
   late ConfettiController _confettiController;
+  late PageController _calendarPageController;
+  final int _initialPage = 5000;
+
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  List<HabitListItem> _displayItems = [];
+  final Map<String, DateTime> _lastToggled = {};
 
   @override
   void initState() {
@@ -25,12 +64,149 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
+    _calendarPageController = PageController(initialPage: _initialPage);
   }
 
   @override
   void dispose() {
     _confettiController.dispose();
+    _calendarPageController.dispose();
     super.dispose();
+  }
+
+  List<HabitListItem> _flattenHabits(List<Habit> habits) {
+    if (habits.isEmpty) return [];
+
+    final originalOrder = {
+      for (var i = 0; i < habits.length; i++) habits[i].id: i
+    };
+
+    int compareHabits(Habit a, Habit b) {
+      final timeA = _lastToggled[a.id];
+      final timeB = _lastToggled[b.id];
+
+      if (timeA != null && timeB != null) {
+        return timeB.compareTo(timeA);
+      } else if (timeA != null) {
+        return -1;
+      } else if (timeB != null) {
+        return 1;
+      } else {
+        return originalOrder[a.id]!.compareTo(originalOrder[b.id]!);
+      }
+    }
+
+    final activeHabitsForDay = habits
+        .where(
+          (h) =>
+              h.frequency.contains(selectedDate.weekday) &&
+              !h.completedDates.any((d) => _isSameDay(d, selectedDate)),
+        )
+        .toList()
+      ..sort(compareHabits);
+
+    final completedHabitsForDay = habits
+        .where(
+          (h) =>
+              h.frequency.contains(selectedDate.weekday) &&
+              h.completedDates.any((d) => _isSameDay(d, selectedDate)),
+        )
+        .toList()
+      ..sort(compareHabits);
+
+    final List<HabitListItem> items = [];
+
+    if (activeHabitsForDay.isNotEmpty) {
+      items.add(
+        HabitListItem.header(
+          context.l10n.todayHabits,
+          badge: "${activeHabitsForDay.length} ${context.l10n.left}",
+        ),
+      );
+      items.addAll(activeHabitsForDay.map((h) => HabitListItem.habit(h, false)));
+    }
+
+    if (completedHabitsForDay.isNotEmpty) {
+      items.add(HabitListItem.header(context.l10n.completed));
+      items.addAll(completedHabitsForDay.map((h) => HabitListItem.habit(h, true)));
+    }
+
+    return items;
+  }
+
+  void _syncListItemChanges(List<HabitListItem> newList) {
+    if (_listKey.currentState == null) {
+      _displayItems = List.from(newList);
+      return;
+    }
+
+    // 1. Remove items that are in _displayItems but NOT in newList
+    for (int i = _displayItems.length - 1; i >= 0; i--) {
+      final currentItem = _displayItems[i];
+      if (!newList.any((element) => element.id == currentItem.id)) {
+        final removedItem = _displayItems.removeAt(i);
+        _listKey.currentState?.removeItem(
+          i,
+          (context, animation) => _buildAnimatedItem(removedItem, animation),
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    }
+
+    // 2. Insert and sync items
+    for (int i = 0; i < newList.length; i++) {
+      final newItem = newList[i];
+      if (i >= _displayItems.length || _displayItems[i].id != newItem.id) {
+        _displayItems.insert(i, newItem);
+        _listKey.currentState?.insertItem(
+          i,
+          duration: const Duration(milliseconds: 300),
+        );
+      } else {
+        _displayItems[i] = newItem;
+      }
+    }
+  }
+
+  Widget _buildAnimatedItem(HabitListItem item, Animation<double> animation) {
+    if (item.type == HabitListItemType.header) {
+      return FadeTransition(
+        opacity: animation,
+        child: SizeTransition(
+          sizeFactor: animation,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: item.badge != null
+                ? _buildSectionHeader(item.title!, item.badge!)
+                : Text(
+                    item.title!,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: context.textTheme.labelLarge?.color,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+          ),
+        ),
+      );
+    } else {
+      final habit = item.habit!;
+      final isCompleted = item.isCompleted;
+
+      return FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(
+              begin: const Offset(1.0, 0.0), // Slide in/out from right
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeOutCubic)),
+          ),
+          child: _buildHabitCard(habit, isCompleted, key: ValueKey("${habit.id}_$isCompleted")),
+        ),
+      );
+    }
   }
 
   @override
@@ -40,6 +216,8 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
     ref.listen(habitListProvider, (previous, next) {
       if (next.hasValue && next.value != null) {
         final habits = next.value!;
+
+        // Handle celebration trigger
         final activeCount = habits
             .where(
               (h) =>
@@ -56,7 +234,6 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
             .length;
 
         if (activeCount == 0 && completedCount > 0) {
-          // Only play confetti if we are transitioning from a state that was NOT done
           bool wasIncompleteBefore = false;
           if (previous != null && previous.hasValue && previous.value != null) {
             final prevHabits = previous.value!;
@@ -67,138 +244,85 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
                       !h.completedDates.any((d) => _isSameDay(d, selectedDate)),
                 )
                 .length;
-            if (prevActiveCount > 0) {
-              wasIncompleteBefore = true;
-            }
+            if (prevActiveCount > 0) wasIncompleteBefore = true;
           }
-
           if (wasIncompleteBefore) {
             _confettiController.play();
+            CelebrationDialog.show(context);
           }
         }
+
+        // Handle List Item Animations
+        _syncListItemChanges(_flattenHabits(habits));
       }
     });
+
+    // Populate initial items if empty and we have data
+    if (_displayItems.isEmpty &&
+        habitsAsync.hasValue &&
+        habitsAsync.value != null) {
+      _displayItems = _flattenHabits(habitsAsync.value!);
+    }
 
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            habitsAsync.when(
-              data: (habits) {
-                // Filter habits for the selected day based on their frequency
-                final activeHabitsForDay = habits
-                    .where(
-                      (h) =>
-                          h.frequency.contains(selectedDate.weekday) &&
-                          !h.completedDates.any(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                const SizedBox(height: 16),
+                _buildCalendarStrip(),
+                const SizedBox(height: 24),
+                habitsAsync.when(
+                  data: (habits) {
+                    final habitsForDay = habits
+                        .where(
+                          (h) => h.frequency.contains(selectedDate.weekday),
+                        )
+                        .toList();
+                    final completedHabitsForDay = habitsForDay
+                        .where(
+                          (h) => h.completedDates.any(
                             (d) => _isSameDay(d, selectedDate),
                           ),
-                    )
-                    .toList();
+                        )
+                        .toList();
 
-                final completedHabitsForDay = habits
-                    .where(
-                      (h) =>
-                          h.frequency.contains(selectedDate.weekday) &&
-                          h.completedDates.any(
-                            (d) => _isSameDay(d, selectedDate),
-                          ),
-                    )
-                    .toList();
+                    final totalForDay = habitsForDay.length;
+                    final progress = totalForDay == 0
+                        ? 0.0
+                        : completedHabitsForDay.length / totalForDay;
 
-                int totalForDay =
-                    activeHabitsForDay.length + completedHabitsForDay.length;
-                double progress = totalForDay == 0
-                    ? 0.0
-                    : completedHabitsForDay.length / totalForDay;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(),
-                    const SizedBox(height: 16),
-                    _buildCalendarStrip(),
-                    const SizedBox(height: 24),
-                    _buildProgressCard(
+                    return _buildProgressCard(
                       context,
                       progress,
                       completedHabitsForDay.length,
                       totalForDay,
-                    ),
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        children: [
-                          if (activeHabitsForDay.isNotEmpty) ...[
-                            _buildSectionHeader(
-                              context.l10n.todayHabits,
-                              "${activeHabitsForDay.length} ${context.l10n.left}",
-                            ),
-                            const SizedBox(height: 12),
-                            ...activeHabitsForDay.map(
-                              (h) => _buildHabitCard(h, false),
-                            ),
-                            const SizedBox(height: 24),
-                          ],
-                          if (completedHabitsForDay.isNotEmpty) ...[
-                            Text(
-                              context.l10n.completed,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: context.textTheme.labelLarge?.color,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            ...[
-                              SizedBox(height: 10), // Add this temporary dummy
-                              ...completedHabitsForDay.map(
-                                (h) => _buildHabitCard(
-                                  h,
-                                  true,
-                                  key: ValueKey(h.id),
-                                ),
-                              ),
-                            ],
-                          ],
-                          const SizedBox(height: 80), // Padding for FAB
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
-              loading: () => const Center(
-                child: CircularProgressIndicator(color: AppTheme.primaryColor),
-              ),
-              error: (error, stack) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 48,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Error loading habits: $error',
-                      style: TextStyle(
-                        color: context.textTheme.labelLarge?.color,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () => ref.invalidate(habitListProvider),
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Refresh'),
-                    ),
-                  ],
+                    );
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (error, stack) => const SizedBox.shrink(),
                 ),
-              ),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: AnimatedList(
+                    key: _listKey,
+                    initialItemCount: _displayItems.length,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+                    itemBuilder: (context, index, animation) {
+                      return _buildAnimatedItem(
+                        _displayItems[index],
+                        animation,
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
             Align(
               alignment: Alignment.topCenter,
@@ -237,28 +361,34 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            DateFormat('MMMM yyyy').format(selectedDate),
-            style: context.textTheme.headlineLarge,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+            child: Text(
+              DateFormat('MMMM yyyy').format(selectedDate),
+              key: ValueKey(DateFormat('MM').format(selectedDate)),
+              style: context.textTheme.headlineLarge,
+            ),
           ),
           Row(
             children: [
               IconButton(
                 icon: const Icon(Icons.chevron_left),
                 onPressed: () {
-                  setState(() {
-                    selectedDate = selectedDate.subtract(
-                      const Duration(days: 7),
-                    );
-                  });
+                  _calendarPageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.chevron_right),
                 onPressed: () {
-                  setState(() {
-                    selectedDate = selectedDate.add(const Duration(days: 7));
-                  });
+                  _calendarPageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
                 },
               ),
             ],
@@ -269,65 +399,95 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
   }
 
   Widget _buildCalendarStrip() {
-    // Generate dates for current week
-    final int currentWeekday = selectedDate.weekday;
-    final DateTime startOfWeek = selectedDate.subtract(
-      Duration(days: currentWeekday - 1),
-    );
-    final List<DateTime> weekDates = List.generate(
-      7,
-      (index) => startOfWeek.add(Duration(days: index)),
-    );
-
     return SizedBox(
-      height: 70,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: 7,
-        itemBuilder: (context, index) {
-          final date = weekDates[index];
-          final isSelected = _isSameDay(date, selectedDate);
+      height: 80,
+      child: PageView.builder(
+        controller: _calendarPageController,
+        onPageChanged: (index) {
+          final int weeksOffset = index - _initialPage;
+          // Calculate the same weekday in the new week
+          final int currentWeekday = selectedDate.weekday;
+          final DateTime startOfTargetWeek = DateTime.now()
+              .subtract(Duration(days: DateTime.now().weekday - 1))
+              .add(Duration(days: weeksOffset * 7));
 
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedDate = date;
-              });
-            },
-            child: Container(
-              width: 50,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
-                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    DateFormat('E').format(date).substring(0, 1),
-                    style: TextStyle(
+          setState(() {
+            _lastToggled.clear();
+            selectedDate = startOfTargetWeek.add(
+              Duration(days: currentWeekday - 1),
+            );
+          });
+        },
+        itemBuilder: (context, pageIndex) {
+          final int weeksOffset = pageIndex - _initialPage;
+          final DateTime startOfThisWeek = DateTime.now()
+              .subtract(Duration(days: DateTime.now().weekday - 1))
+              .add(Duration(days: weeksOffset * 7));
+
+          final List<DateTime> weekDates = List.generate(
+            7,
+            (index) => startOfThisWeek.add(Duration(days: index)),
+          );
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: weekDates.map((date) {
+                final isSelected = _isSameDay(date, selectedDate);
+                final isToday = _isSameDay(date, DateTime.now());
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _lastToggled.clear();
+                      selectedDate = date;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    width: 46,
+                    decoration: BoxDecoration(
                       color: isSelected
-                          ? Colors.white
-                          : context.textTheme.labelLarge?.color,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                          ? AppTheme.primaryColor
+                          : isToday
+                          ? AppTheme.primaryColor.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                      border: isToday && !isSelected
+                          ? Border.all(color: AppTheme.primaryColor, width: 1)
+                          : null,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DateFormat('E').format(date).substring(0, 1),
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.white
+                                : context.textTheme.labelLarge?.color,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.white
+                                : context.colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    date.day.toString(),
-                    style: TextStyle(
-                      color: isSelected
-                          ? Colors.white
-                          : context.colorScheme.onSurface,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              }).toList(),
             ),
           );
         },
@@ -431,128 +591,131 @@ class _HabitsMainScreenState extends ConsumerState<HabitsMainScreen> {
   }
 
   Widget _buildHabitCard(Habit habit, bool isCompleted, {Key? key}) {
-    //check if date is future date
     bool isFutureDate = selectedDate.isAfter(DateTime.now());
 
-    return GestureDetector(
+    return Padding(
       key: key,
-      onTap: () => context.push('/details/${habit.id}'),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: context.cardColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (isFutureDate) {
-                  //show message
-                  context.showSnackBar(
-                    context.l10n.youCannotCompleteFutureDates,
-                    color: Colors.red,
-                  );
-                  return;
-                }
+      padding: const EdgeInsets.only(bottom: 12),
+      child: GestureDetector(
+        onTap: () => context.push('/details/${habit.id}'),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: context.cardColor,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              if (!isCompleted)
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+            ],
+          ),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (isFutureDate) {
+                    context.showSnackBar(
+                      context.l10n.youCannotCompleteFutureDates,
+                      color: Colors.red,
+                    );
+                    return;
+                  }
+                  
+                  _lastToggled[habit.id] = DateTime.now();
 
-                ref
-                    .read(habitListProvider.notifier)
-                    .toggleHabitCompletion(habit.id, selectedDate);
-              },
-              child: Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isCompleted
-                      ? AppTheme.primaryColor
-                      : Colors.transparent,
-                  border: Border.all(
+                  ref
+                      .read(habitListProvider.notifier)
+                      .toggleHabitCompletion(habit.id, selectedDate);
+                },
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
                     color: isCompleted
                         ? AppTheme.primaryColor
-                        : context.colorScheme.outlineVariant,
-                    width: 2,
-                  ),
-                ),
-                child: isCompleted
-                    ? const Icon(Icons.check, size: 18, color: Colors.white)
-                    : null,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    habit.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                        : Colors.transparent,
+                    border: Border.all(
                       color: isCompleted
-                          ? context.textTheme.labelLarge?.color
-                          : context.colorScheme.onSurface,
-                      decoration: isCompleted
-                          ? TextDecoration.lineThrough
-                          : null,
+                          ? AppTheme.primaryColor
+                          : context.colorScheme.outlineVariant,
+                      width: 2,
                     ),
                   ),
-                  if (habit.category.isNotEmpty) ...[
+                  child: isCompleted
+                      ? const Icon(Icons.check, size: 18, color: Colors.white)
+                      : null,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      habit.category,
+                      habit.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: context.textTheme.labelLarge?.color,
-                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: isCompleted
+                            ? context.textTheme.labelLarge?.color
+                            : context.colorScheme.onSurface,
                         decoration: isCompleted
                             ? TextDecoration.lineThrough
-                            : null,
+                            : TextDecoration.none,
                       ),
                     ),
-                    if (habit.isReminderEnabled &&
-                        habit.notificationTime != null)
-                      const SizedBox(height: 4),
-                  ],
-                  if (habit.isReminderEnabled && habit.notificationTime != null)
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 14,
-                          color: isCompleted
-                              ? context.colorScheme.outlineVariant
-                              : AppTheme.primaryColor,
+                    if (habit.category.isNotEmpty) ...[
+                      Text(
+                        habit.category,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: context.textTheme.labelLarge?.color,
+                          fontSize: 13,
+                          decoration: isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
                         ),
-                        const SizedBox(width: 4),
-                        Text(
-                          TimeOfDay.fromDateTime(
-                            habit.notificationTime!,
-                          ).format(context),
-                          style: TextStyle(
+                      ),
+                    ],
+                    if (habit.isReminderEnabled &&
+                        habit.notificationTime != null) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            size: 14,
                             color: isCompleted
                                 ? context.colorScheme.outlineVariant
                                 : AppTheme.primaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
                           ),
-                        ),
-                      ],
-                    ),
-                ],
+                          const SizedBox(width: 4),
+                          Text(
+                            TimeOfDay.fromDateTime(
+                              habit.notificationTime!,
+                            ).format(context),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isCompleted
+                                  ? context.colorScheme.outlineVariant
+                                  : context.textTheme.labelLarge?.color,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
               ),
-            ),
-            Icon(
-              habit.icon,
-              color: isCompleted
-                  ? context.colorScheme.outlineVariant
-                  : AppTheme.primaryColor,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

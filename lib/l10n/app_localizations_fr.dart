@@ -189,6 +189,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Excellent travail ! Vous avez tout terminé pour aujourd\'hui.';
 
   @override
+  String get allHabitsDoneToday =>
+      'Toutes les habitudes d\'aujourd\'hui sont terminées !';
+
+  @override
   String get edit => 'Modifier';
 
   @override
@@ -316,4 +320,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get youCannotCompleteFutureDates =>
       'Vous ne pouvez pas compléter les dates futures';
+
+  @override
+  String get continueBtn => 'Continuer';
 }

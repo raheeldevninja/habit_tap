@@ -68,6 +68,7 @@
   "goodStart": "Good start! Keep going.",
   "almostThere": "Almost there! Keep it up.",
   "amazingJob": "Amazing job! You've completed everything for today.",
+  "allHabitsDoneToday": "All habits for today are completed!",
   "edit": "Edit",
   "general": "General",
   "noStreakYet": "No streak yet",
@@ -141,5 +142,6 @@
   "allIcons": "All Icons",
   "version": "Version",
   "aboutApp": "About App",
-  "youCannotCompleteFutureDates": "You cannot complete future dates"
+  "youCannotCompleteFutureDates": "You cannot complete future dates",
+  "continueBtn": "Continue"
 }

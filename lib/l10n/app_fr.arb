@@ -68,6 +68,7 @@
   "goodStart": "Bon début ! Continuez.",
   "almostThere": "Presque là ! Continuez comme ça.",
   "amazingJob": "Excellent travail ! Vous avez tout terminé pour aujourd'hui.",
+  "allHabitsDoneToday": "Toutes les habitudes d'aujourd'hui sont terminées !",
   "edit": "Modifier",
   "general": "Général",
   "noStreakYet": "Pas encore de série",
@@ -82,6 +83,12 @@
   "allTimeRecord": "Record historique",
   "weeklyProgress": "Complétion Hebdomadaire",
   "daysCompletedThisWeek": "{count}/{total} jours terminés cette semaine",
+  "@daysCompletedThisWeek": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
   "monthlyProgress": "Progrès Mensuel",
   "schedule": "Planning",
   "everyDay": "Chaque jour",
@@ -135,5 +142,6 @@
   "allIcons": "Toutes les icônes",
   "version": "Version",
   "aboutApp": "À Propos de l'App",
-  "youCannotCompleteFutureDates": "Vous ne pouvez pas compléter les dates futures"
+  "youCannotCompleteFutureDates": "Vous ne pouvez pas compléter les dates futures",
+  "continueBtn": "Continuer"
 }

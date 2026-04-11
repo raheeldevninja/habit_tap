@@ -12,29 +12,63 @@ class HabitListNotifier extends AsyncNotifier<List<Habit>> {
 
   Future<void> addHabit(Habit habit) async {
     final repository = ref.read(habitRepositoryProvider);
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final previousState = state;
+    
+    // Optimistic update
+    state = AsyncValue.data([...(state.valueOrNull ?? []), habit]);
+
+    final result = await AsyncValue.guard(() async {
       await repository.addHabit(habit);
       return repository.getHabits();
     });
+
+    if (result.hasError) {
+      state = previousState;
+    } else {
+      state = result;
+    }
   }
 
   Future<void> updateHabit(Habit habit) async {
     final repository = ref.read(habitRepositoryProvider);
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final previousState = state;
+
+    // Optimistic update
+    state = AsyncValue.data(
+      (state.valueOrNull ?? []).map((h) => h.id == habit.id ? habit : h).toList(),
+    );
+
+    final result = await AsyncValue.guard(() async {
       await repository.updateHabit(habit);
       return repository.getHabits();
     });
+
+    if (result.hasError) {
+      state = previousState;
+    } else {
+      state = result;
+    }
   }
 
   Future<void> deleteHabit(String id) async {
     final repository = ref.read(habitRepositoryProvider);
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final previousState = state;
+
+    // Optimistic update
+    state = AsyncValue.data(
+      (state.valueOrNull ?? []).where((h) => h.id != id).toList(),
+    );
+
+    final result = await AsyncValue.guard(() async {
       await repository.deleteHabit(id);
       return repository.getHabits();
     });
+
+    if (result.hasError) {
+      state = previousState;
+    } else {
+      state = result;
+    }
   }
 
   Future<void> deleteAll() async {
@@ -61,7 +95,11 @@ class HabitListNotifier extends AsyncNotifier<List<Habit>> {
 
   Future<void> toggleHabitCompletion(String habitId, DateTime date) async {
     final currentValue = state.valueOrNull ?? [];
-    final habit = currentValue.firstWhere((h) => h.id == habitId);
+    final habitIndex = currentValue.indexWhere((h) => h.id == habitId);
+    if (habitIndex == -1) return;
+
+    final habit = currentValue[habitIndex];
+    final previousState = state;
 
     // Normalize date to ignore time component
     final normalizedDate = DateTime(date.year, date.month, date.day);
@@ -90,12 +128,23 @@ class HabitListNotifier extends AsyncNotifier<List<Habit>> {
       bestStreak: bestStreak,
     );
 
+    // Optimistic update
+    final updatedList = List<Habit>.from(currentValue);
+    updatedList[habitIndex] = updatedHabit;
+    state = AsyncValue.data(updatedList);
+
     final repository = ref.read(habitRepositoryProvider);
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       await repository.updateHabit(updatedHabit);
       return repository.getHabits();
     });
+
+    if (result.hasError) {
+      state = previousState;
+    } else {
+      // Use the refreshed data from the repository to ensure consistency
+      state = result;
+    }
   }
 
   (int, int) _recalculateStreaks(List<DateTime> dates, List<int> frequency) {

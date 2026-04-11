@@ -444,6 +444,12 @@ abstract class AppLocalizations {
   /// **'Amazing job! You\'ve completed everything for today.'**
   String get amazingJob;
 
+  /// No description provided for @allHabitsDoneToday.
+  ///
+  /// In en, this message translates to:
+  /// **'All habits for today are completed!'**
+  String get allHabitsDoneToday;
+
   /// No description provided for @edit.
   ///
   /// In en, this message translates to:
@@ -671,6 +677,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You cannot complete future dates'**
   String get youCannotCompleteFutureDates;
+
+  /// No description provided for @continueBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueBtn;
 }
 
 class _AppLocalizationsDelegate

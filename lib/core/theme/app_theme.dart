@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static const Color primaryColor = Color(0xFF39e079);
   static const Color secondaryColor = Color(0xFFF57C00);
-  static const Color backgroundColor = Color(0xFFF9F9FB);
+  // Using a soft slate gray to ensure white cards (cardColor) are starkly prominent.
+  static const Color backgroundColor = Color(0xFFF1F5F9); 
   static const Color cardColor = Colors.white;
   static const Color textColor = Color(0xFF333333);
   static const Color textLightColor = Color(0xFF888888);
@@ -26,6 +27,8 @@ class AppTheme {
         seedColor: primaryColor,
         secondary: secondaryColor,
         error: errorColor,
+        surface: Colors.white,
+        surfaceTint: Colors.transparent,
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: backgroundColor,
@@ -172,6 +175,7 @@ class AppTheme {
       ),
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        tileColor: cardColor,
       ),
     );
   }
@@ -334,6 +338,7 @@ class AppTheme {
       ),
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        tileColor: darkCardColor,
       ),
     );
   }
