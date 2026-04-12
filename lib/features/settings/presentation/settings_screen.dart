@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/theme_provider.dart';
@@ -94,18 +94,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _buildNavigationItem(
                 icon: Icons.privacy_tip_outlined,
                 title: context.l10n.privacyPolicy,
-                trailingIcon: Icons.open_in_new,
-                onTap: () => _launchURL(
-                  'https://raheeldevninja.github.io/habt-tap-legal-pages/privacy-policy.html',
-                ),
+                onTap: () => context.push('/privacy'),
               ),
               _buildNavigationItem(
                 icon: Icons.description_outlined,
                 title: context.l10n.termsOfService,
-                trailingIcon: Icons.open_in_new,
-                onTap: () => _launchURL(
-                  'https://raheeldevninja.github.io/habt-tap-legal-pages/terms-of-service.html',
-                ),
+                onTap: () => context.push('/terms'),
               ),
             ]),
             const SizedBox(height: 40),
@@ -598,12 +592,4 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
-  Future<void> _launchURL(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      if (mounted) {
-        context.showSnackBar(context.l10n.couldNotLaunch(urlString));
-      }
-    }
-  }
 }

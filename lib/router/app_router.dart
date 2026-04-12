@@ -10,6 +10,9 @@ import '../features/statistics/presentation/statistics_screen.dart';
 import '../features/habits/presentation/habit_history_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../features/habits/presentation/icon_selection_screen.dart';
+import '../features/settings/presentation/legal_page_screen.dart';
+import '../core/constants/legal_texts.dart';
+import 'package:habit_tracker_app/core/extension/context.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -68,6 +71,24 @@ final GoRouter appRouter = GoRouter(
           path: '/select-icon',
           builder: (BuildContext context, GoRouterState state) {
             return const IconSelectionScreen();
+          },
+        ),
+        GoRoute(
+          path: '/privacy',
+          builder: (BuildContext context, GoRouterState state) {
+            return LegalPageScreen(
+              title: context.l10n.privacyPolicy,
+              content: LegalTexts.privacyPolicy,
+            );
+          },
+        ),
+        GoRoute(
+          path: '/terms',
+          builder: (BuildContext context, GoRouterState state) {
+            return LegalPageScreen(
+              title: context.l10n.termsOfService,
+              content: LegalTexts.termsOfService,
+            );
           },
         ),
       ],
