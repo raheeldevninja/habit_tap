@@ -223,6 +223,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final isSelected = currentTheme == mode;
 
     return ListTile(
+      tileColor: Colors.transparent,
       leading: _buildIconContainer(
         icon,
         color: isSelected
@@ -335,6 +336,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final isSelected = currentLocale.languageCode == locale.languageCode;
 
     return ListTile(
+      tileColor: Colors.transparent,
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(

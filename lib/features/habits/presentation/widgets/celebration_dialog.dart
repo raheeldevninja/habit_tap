@@ -69,6 +69,7 @@ class CelebrationDialog extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: context.colorScheme.onSurface,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
                     Text(
